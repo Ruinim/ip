@@ -22,7 +22,8 @@ public class Task {
     public Task mark() {
         return new Task("[X]", this.task);
     }
-    
+
+    @Override
     public String toString() {
         return this.done + " " + this.task;
     }
