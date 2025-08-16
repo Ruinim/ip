@@ -1,8 +1,16 @@
 public class ReimException {
     private final Integer err;
+    private final String command;
 
-    public ReimException(Integer err) {
+    public ReimException(Integer err, String command) {
         this.err = err;
+        this.command = command;
+    }
+
+    public static String message(String msg) {
+        return "____________________________________________________________\n"
+                + msg + "\n"
+                + "____________________________________________________________\n";
     }
 
     public String toString() {
@@ -10,7 +18,7 @@ public class ReimException {
             "missing arguments", "invalid command: list command should not have arguments",
             "invalid command: mark command followed by char when it was meant to be an int",
             "Index out of bounds", "invalid arguments: no timing given", "invalid argument: no task given in command"};
-        return error_msg[this.err - 1];
+        return message("Error in command: " + this.command + " ; " + error_msg[this.err - 1]);
     }
 
 }

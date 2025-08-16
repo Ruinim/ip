@@ -25,14 +25,14 @@ public class Reim {
             }
             Integer error = errorInCommand(command, items);
             if (error > 0) {
-                System.out.println(new ReimException(error));
+                System.out.println(new ReimException(error, command));
                 continue;
             }
             String output = action(command, items);
             if (output.isEmpty()){
                 String addition = addingList(command, items);
                 output = message("Got it. I've added this task:\n" + addition
-                        + "\nNow you have " + items.size() + " tasks in the list.");
+                        + "\nNow you have " + items.size() + " task(s) in the list.");
             }
             System.out.println(output);
         }
@@ -80,6 +80,9 @@ public class Reim {
         else if (command.startsWith("unmark")) {
             return 4;
         }
+        else if (command.startsWith("delete")) {
+            return 5;
+        }
         return 0;
     }
 
@@ -95,11 +98,18 @@ public class Reim {
             arr.set(Integer.parseInt(taskIndex) - 1, t.mark());
             finalOutput = message("Nice! I've marked this task as done:\n" + t.mark());
         }
-        else if (commandType.equals(4)) {
+        else if (commandType.equals(4)) { //unmark
             String taskIndex = command.substring(7); //number
             Task t = arr.get(Integer.parseInt(taskIndex) - 1);
             arr.set(Integer.parseInt(taskIndex) - 1, t.unmark());
             finalOutput = message("OK, I've marked this task as not done yet:\n" + t.unmark());
+        }
+        else if (commandType.equals(5)) { //delete
+            String taskIndex = command.substring(7);
+            Task t = arr.get(Integer.parseInt(taskIndex) - 1);
+            arr.remove(Integer.parseInt(taskIndex) - 1);
+            finalOutput = message("Noted, I've removed this task:\n" + t +"\nNow you have "
+                    + arr.size() + " task(s) in the list");
         }
         return finalOutput;
     }
@@ -114,7 +124,7 @@ public class Reim {
 
     public static Integer errorInCommand(String command, ArrayList<Task> arr) {
         // list, todo, event, deadline, mark, unmark
-        String[] command_list = {"list", "todo", "deadline", "event", "mark", "unmark"};
+        String[] command_list = {"list", "todo", "deadline", "event", "mark", "unmark", "delete"};
         int error_code = 0;
         int count = 0;
         for (int i = 0; i < command_list.length; i++) {
@@ -131,6 +141,9 @@ public class Reim {
                 }
                 else if (command.startsWith("unmark")) {
                     error_code = unmarkCheck(command, arr, error_code);
+                }
+                else if (command.startsWith("delete")) {
+                    error_code = deleteCheck(command, arr, error_code);
                 }
                 // todo doesnt have errors what wouldnt be caught by the first check
                 else if (command.startsWith("deadline")) {
@@ -197,6 +210,18 @@ public class Reim {
         }
         else if (command.substring(index + 5).isEmpty()) {
             return 6;
+        }
+        return error_code;
+    }
+
+    public static Integer deleteCheck(String command, ArrayList<Task> arr, Integer error_code) {
+        try {
+            String taskIndex = command.substring(7); //number
+            Task t = arr.get(Integer.parseInt(taskIndex) - 1);
+        } catch (NumberFormatException e) {
+            error_code = 4; // invalid command: mark command followed by char when it was meant to be an int
+        } catch (IndexOutOfBoundsException e) {
+            error_code = 5; // Index out of bounds
         }
         return error_code;
     }
