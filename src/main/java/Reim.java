@@ -145,13 +145,15 @@ public class Reim {
                 else if (command.startsWith("delete")) {
                     error_code = deleteCheck(command, arr, error_code);
                 }
-                // todo doesnt have errors what wouldnt be caught by the first check
+                else if (command.startsWith("todo")) {
+                    error_code = todoCheck(command, arr);
+                }
                 else if (command.startsWith("deadline")) {
-                    error_code = deadlineCheck(command, error_code);
+                    error_code = deadlineCheck(command, arr);
 
                 }
                 else if (command.startsWith("event")) {
-                    error_code = eventCheck(command, error_code);
+                    error_code = eventCheck(command, arr);
                 }
 
             }
@@ -166,6 +168,9 @@ public class Reim {
         try {
             String taskIndex = command.substring(5); //number
             Task t = arr.get(Integer.parseInt(taskIndex) - 1);
+            if (t.getDone().equals("[X]")) {
+                error_code = 9; // task is already marked as not done
+            }
         } catch (NumberFormatException e) {
             error_code = 4; // invalid command: mark command followed by char when it was meant to be an int
         } catch (IndexOutOfBoundsException e) {
@@ -178,15 +183,26 @@ public class Reim {
         try {
             String taskIndex = command.substring(7); //number
             Task t = arr.get(Integer.parseInt(taskIndex) - 1);
+            if (t.getDone().equals("[ ]")) {
+                error_code = 8; // task is already marked as not done
+            }
         } catch (NumberFormatException e) {
             error_code = 4; // invalid command: mark command followed by char when it was meant to be an int
         } catch (IndexOutOfBoundsException e) {
             error_code = 5; // Index out of bounds
         }
+
         return error_code;
     }
 
-    public static Integer deadlineCheck(String command, Integer error_code) {
+    public static Integer todoCheck(String command, ArrayList<Task> arr) {
+        if (arr.stream().anyMatch(x -> x.getTask().equals(command.substring(5)))) {
+            return 10; //duplicate task
+        }
+        return 0;
+    }
+
+    public static Integer deadlineCheck(String command, ArrayList<Task> arr) {
         if(!command.contains("/by")) { //no /by
             return 6; // invalid arguments: no timing given
         }
@@ -197,10 +213,13 @@ public class Reim {
         else if (command.substring(index+ 3).isEmpty()) {
             return 6;
         }
-        return error_code;
+        else if (arr.stream().anyMatch(x -> x.getTask().equals(command.substring(9,index)))) {
+            return 10; //duplicate task
+        }
+        return 0;
     }
 
-    public static Integer eventCheck(String command, Integer error_code) {
+    public static Integer eventCheck(String command, ArrayList<Task> arr) {
         if (!command.contains("/from")) {
             return 6; // invalid arguments: no timing given
         }
@@ -211,7 +230,10 @@ public class Reim {
         else if (command.substring(index + 5).isEmpty()) {
             return 6;
         }
-        return error_code;
+        else if (arr.stream().anyMatch(x -> x.getTask().equals(command.substring(6,index)))) {
+            return 10; // duplicate task
+        }
+        return 0;
     }
 
     public static Integer deleteCheck(String command, ArrayList<Task> arr, Integer error_code) {
