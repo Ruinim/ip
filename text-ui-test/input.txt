@@ -1,2 +1,19 @@
 todo borrow book
+deadline assignment /by friday
+event party /from tuesday
+mark 1
+mark 3
+delete 2
+unmark 2
+unmark 2
+todo cook
+todo
+dead
+hey
+deadline /by friday
+todo borrow
+deadline something
+event /from now
+event present
+list
 bye
