@@ -16,8 +16,9 @@ public class Reim {
                 """;
         System.out.println(logo);
         ArrayList<Task> items = new ArrayList<>();
-        while (true) {
-            Scanner read = new Scanner(System.in);
+        Scanner read = new Scanner(System.in);
+        while (read.hasNext()) {
+//            Scanner read = new Scanner(System.in);
             String command = read.nextLine();
             if (command.equals("bye")) {
                 System.out.println(end);
