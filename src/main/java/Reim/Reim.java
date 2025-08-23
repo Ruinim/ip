@@ -393,55 +393,5 @@ public class Reim {
 //        }
 //        return output;
 //    }
-////
-//    public static Reim.Task parser(String command) {
-//        String type = String.valueOf(command.charAt(0));
-//        String done = String.valueOf(command.charAt(4));
-//        String rest = command.substring(8);
-//
-//        if (type.equals("T")) {
-//            if (done.equals("1")) {
-//                return new Reim.Todo(rest, "[X]");
-//            }
-//            return new Reim.Todo("[ ]", rest);
-//        }
-//        else if (type.equals("D")) {
-//            String[] p = rest.split(" \\| ");
-//            String task = p[0];
-//            String time = p[1];
-//            String[] dt = time.split(" ");
-//            if (dt.length == 2) {
-//                LocalDate date = LocalDate.parse(dt[0]);
-//                String timing = dt[1];
-//                LocalTime lt = LocalTime.parse(timing);
-//                if (done.equals("1")) {
-//                    return new Reim.Reim.Deadline("[X]", task, date, lt);
-//                }
-//                return new Reim.Reim.Deadline("[ ]", task, date, lt);
-//            }
-//            if (done.equals("1")) {
-//                return new Reim.Reim.Deadline("[X]", task, time);
-//            }
-//            return new Reim.Reim.Deadline("[ ]", task, time);
-//        }
-//        // its E
-//        String[] p = rest.split(" \\| ");
-//        String task = p[0];
-//        String time = p[1];
-//        String[] dt = time.split(" ");
-//        if (dt.length == 2) {
-//            LocalDate date = LocalDate.parse(dt[0]);
-//            String timing = dt[1];
-//            LocalTime lt = LocalTime.parse(timing);
-//            if (done.equals("1")) {
-//                return new Reim.Reim.Event("[X]", task, date, lt);
-//            }
-//            return new Reim.Reim.Event("[ ]", task, date, lt);
-//        }
-//        if (done.equals("1")) {
-//            return new Reim.Reim.Event("[X]", task, time);
-//        }
-//        return new Reim.Reim.Event("[X]", task, time);
-//    }
-//
+
 }
