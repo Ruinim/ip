@@ -4,8 +4,16 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Scanner;
 import java.util.ArrayList;
-
+/**
+ * Reim is the driver class of the entire application
+ * @author Ruinim
+ */
 public class Reim {
+    /**
+     * storage is where our class methods of reading initial file and saving entries are located
+     * items is the TaskList of items where our entries are
+     * ui is the printing class
+     */
     private Storage storage;
     private TaskList items;
     private Ui ui;
@@ -17,9 +25,13 @@ public class Reim {
 
     }
 
+    /**
+     * driver method
+     */
     public void run() {
         ui.start();
         Scanner read = new Scanner(System.in);
+
         while (read.hasNext()) {
             String command = read.nextLine();
             if (command.equals("bye")) {
@@ -27,12 +39,13 @@ public class Reim {
                 break;
             }
             Parser parser = new Parser(command, items);
-//            Integer error = errorInCommand(command, items);
             Integer error = parser.errorInCommand();
+
             if (error > 0) {
                 ui.printError(new ReimException(error, command));
                 continue;
             }
+
             String output = parser.action();
             if (output.isEmpty()){
                 String addition = parser.addingList();
@@ -42,7 +55,6 @@ public class Reim {
 
             }
 
-//            saveArray(items, dirPath, filePath);
             storage.saveArray(items);
             ui.printOutput(output);
         }

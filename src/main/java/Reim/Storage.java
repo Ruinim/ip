@@ -8,15 +8,27 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * Class at which we use to read the initial file and to write into a data file to save our entries
+ * @author Ruinim
+ */
 public class Storage {
-    protected String dp;
-    protected String fp;
+    /**
+     * dp is the directory path given
+     * fp is the file path given
+     */
+    private final String dp;
+    private final String fp;
 
     public Storage(String dirPath, String filePath) {
         this.dp = dirPath;
         this.fp = filePath;
     }
 
+    /**
+     * Reads the files from the file path given during the creation of the object
+     * @return TaskList generated from the file given
+     */
     public TaskList readFile() {
         File f = new File(this.fp);
         TaskList output = new TaskList();
@@ -35,6 +47,11 @@ public class Storage {
         return output;
     }
 
+    /**
+     * processes the string commands in the file and coverts them to their respective tasks
+     * @param command the command to process
+     * @return the Task generated form the string
+     */
     private static Task parser(String command) {
         String type = String.valueOf(command.charAt(0));
         String done = String.valueOf(command.charAt(4));
@@ -51,6 +68,7 @@ public class Storage {
             String task = p[0];
             String time = p[1];
             String[] dt = time.split(" ");
+
             if (dt.length == 2) {
                 LocalDate date = LocalDate.parse(dt[0]);
                 String timing = dt[1];
@@ -70,6 +88,7 @@ public class Storage {
         String task = p[0];
         String time = p[1];
         String[] dt = time.split(" ");
+
         if (dt.length == 2) {
             LocalDate date = LocalDate.parse(dt[0]);
             String timing = dt[1];
@@ -85,9 +104,13 @@ public class Storage {
         return new Event("[X]", task, time);
     }
 
+    /**
+     * Saving the entries of our current TaskList into the file
+     * @param arr taskList to be saved into the external file
+     */
     public void saveArray(TaskList arr){
         File d = new File(this.dp);
-        File f = new File(d, "Reim.Reim.txt");
+
         if (!d.exists()) {
             d.mkdirs();
         }
@@ -101,8 +124,7 @@ public class Storage {
             String finalOutput = output.toString();
             writer.write(finalOutput);
             writer.close();
-        }
-        catch (IOException ignored) {
+        } catch (IOException ignored) {
             // refers to if there is nothing to read from file
         }
     }
