@@ -1,4 +1,6 @@
 import java.io.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -25,7 +27,6 @@ public class Reim {
         ArrayList<Task> items = readFile(filePath);
         Scanner read = new Scanner(System.in);
         while (read.hasNext()) {
-//            Scanner read = new Scanner(System.in);
             String command = read.nextLine();
             if (command.equals("bye")) {
                 System.out.println(end);
@@ -37,7 +38,6 @@ public class Reim {
                 continue;
             }
             String output = action(command, items);
-//            System.out.println(output);
             if (output.isEmpty()){
                 String addition = addingList(command, items);
                 output = message("Got it. I've added this task:\n" + addition
@@ -63,16 +63,36 @@ public class Reim {
         else if (command.startsWith("deadline")) {
             int index = command.indexOf("/");
             String task = command.substring(9, index);
-            String deadline = command.substring(index+ 3);
-            arr.add(new Deadline("[ ]", task, deadline));
-            return new Deadline("[ ]", task, deadline).toString();
+            String deadline = command.substring(index+ 4);
+            if (deadline.length() == 15) { // yyyy-mm-dd tttt
+                LocalDate date = LocalDate.parse(deadline.substring(0, 10));
+                String timing = deadline.substring(11);
+                String formatted_timing = new StringBuilder(timing).insert(2, ":").toString();
+                LocalTime time = LocalTime.parse(formatted_timing);
+                arr.add(new Deadline("[ ]", task, date, time));
+                return new Deadline("[ ]", task, date, time).toString();
+            }
+            else {
+                LocalDate date = LocalDate.parse(deadline);
+                arr.add(new Deadline("[ ]", task, date));
+                return new Deadline("[ ]", task, date).toString();
+            }
         }
         else if (command.startsWith("event")) {
             int index = command.indexOf("/");
             String task = command.substring(6, index);
-            String at = command.substring(index + 5);
-            arr.add(new Event("[ ]", task, at));
-            return new Event("[ ]", task, at).toString();
+            String at = command.substring(index + 6);
+            if (at.length() == 15) { // yyyy-mm-dd tttt
+                LocalDate date = LocalDate.parse(at.substring(0, 10));
+                String timing = at.substring(11);
+                String formatted_timing = new StringBuilder(timing).insert(2, ":").toString();
+                LocalTime time = LocalTime.parse(formatted_timing);
+                arr.add(new Event("[ ]", task, date, time));
+                return new Event("[ ]", task, date, time).toString();
+            }
+            LocalDate date = LocalDate.parse(at);
+            arr.add(new Event("[ ]", task, date));
+            return new Event("[ ]", task, date).toString();
         }
         return "";
     }
@@ -104,7 +124,6 @@ public class Reim {
         String finalOutput = "";
         if (commandType.equals(2)) { //list
             finalOutput = message(listOutput(arr));
-//            System.out.println(finalOutput);
         }
         else if (commandType.equals(3)) { //mark
             String taskIndex = command.substring(5); //number
@@ -178,18 +197,6 @@ public class Reim {
     }
 
     public static Integer markCheck(String command, ArrayList<Task> arr, Integer error_code){
-//        try {
-//            String taskIndex = command.substring(5); //number
-//            Task t = arr.get(Integer.parseInt(taskIndex) - 1);
-//            if (t.getDone().equals("[X]")) {
-//                error_code = 9; // task is already marked as not done
-//            }
-//        } catch (NumberFormatException e) {
-//            error_code = 4; // invalid command: mark command followed by char when it was meant to be an int
-//        } catch (IndexOutOfBoundsException e) {
-//            error_code = 5; // Index out of bounds
-//        }
-//        return error_code;
         try {
             String taskIndex = command.substring(5); //number
             if (cannotIntParse(taskIndex)) {
@@ -223,19 +230,6 @@ public class Reim {
     }
 
     public static Integer unmarkCheck(String command, ArrayList<Task> arr, Integer error_code) {
-//        try {
-//            String taskIndex = command.substring(7); //number
-//            Task t = arr.get(Integer.parseInt(taskIndex) - 1);
-//            if (t.getDone().equals("[ ]")) {
-//                error_code = 8; // task is already marked as not done
-//            }
-//        } catch (NumberFormatException e) {
-//            error_code = 4; // invalid command: mark command followed by char when it was meant to be an int
-//        } catch (IndexOutOfBoundsException e) {
-//            error_code = 5; // Index out of bounds
-//        }
-//
-//        return error_code;
         try {
             String taskIndex = command.substring(7); //number
             if (cannotIntParse(taskIndex)) {
@@ -284,6 +278,9 @@ public class Reim {
             } else if (arr.stream().anyMatch(x -> x.getTask().equals(command.substring(9, index)))) {
                 throw new ReimException(10, command); //duplicate task
             }
+            else if (!(command.substring(index + 4).matches("\\d{4}-\\d{2}-\\d{2} \\d{4}") || command.substring(index + 4).matches("\\d{4}-\\d{2}-\\d{2}"))) {
+                throw new ReimException(11, command);
+            }
         }
         catch (ReimException e) {
             return e.getError();
@@ -304,6 +301,9 @@ public class Reim {
                 throw new ReimException(6, command);
             } else if (arr.stream().anyMatch(x -> x.getTask().equals(command.substring(6, index)))) {
                 throw new ReimException(10, command); // duplicate task
+            }
+            else if (!(command.substring(index + 6).matches("\\d{4}-\\d{2}-\\d{2} \\d{4}") || command.substring(index + 6).matches("\\d{4}-\\d{2}-\\d{2}"))) {
+                throw new ReimException(11, command);
             }
         }
         catch (ReimException e) {
@@ -362,6 +362,16 @@ public class Reim {
             String[] p = rest.split(" \\| ");
             String task = p[0];
             String time = p[1];
+            String[] dt = time.split(" ");
+            if (dt.length == 2) {
+                LocalDate date = LocalDate.parse(dt[0]);
+                String timing = dt[1];
+                LocalTime lt = LocalTime.parse(timing);
+                if (done.equals("1")) {
+                    return new Deadline("[X]", task, date, lt);
+                }
+                return new Deadline("[ ]", task, date, lt);
+            }
             if (done.equals("1")) {
                 return new Deadline("[X]", task, time);
             }
@@ -371,6 +381,16 @@ public class Reim {
         String[] p = rest.split(" \\| ");
         String task = p[0];
         String time = p[1];
+        String[] dt = time.split(" ");
+        if (dt.length == 2) {
+            LocalDate date = LocalDate.parse(dt[0]);
+            String timing = dt[1];
+            LocalTime lt = LocalTime.parse(timing);
+            if (done.equals("1")) {
+                return new Event("[X]", task, date, lt);
+            }
+            return new Event("[ ]", task, date, lt);
+        }
         if (done.equals("1")) {
             return new Event("[X]", task, time);
         }
