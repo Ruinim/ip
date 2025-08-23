@@ -21,7 +21,8 @@ public class ReimException extends Exception{
             "missing arguments", "invalid command: list command should not have arguments",
             "invalid command: mark command followed by char when it was meant to be an int",
             "Index out of bounds", "invalid arguments: no timing given", "invalid argument: no task given in command",
-            "Reim.Task is already marked as not done", "Reim.Task is already marked as done", "Duplicate task", "Time given in wrong format"};
+            "Reim.Task is already marked as not done", "Reim.Task is already marked as done", "Duplicate task", "Time given in wrong format",
+            "Invalid date"};
         return "Error in command: " + this.command + " ; " + error_msg[this.err - 1];
     }
 

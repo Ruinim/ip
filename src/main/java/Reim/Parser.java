@@ -19,7 +19,7 @@ public class Parser {
         }
         else if (this.command.startsWith("deadline")) {
             int index = this.command.indexOf("/");
-            String task = this.command.substring(9, index);
+            String task = this.command.substring(9, index - 1);
             String deadline = this.command.substring(index+ 4);
             if (deadline.length() == 15) { // yyyy-mm-dd tttt
                 LocalDate date = LocalDate.parse(deadline.substring(0, 10));
@@ -37,7 +37,7 @@ public class Parser {
         }
         else if (this.command.startsWith("event")) {
             int index = this.command.indexOf("/");
-            String task = this.command.substring(6, index);
+            String task = this.command.substring(6, index - 1);
             String at = this.command.substring(index + 6);
             if (at.length() == 15) { // yyyy-mm-dd tttt
                 LocalDate date = LocalDate.parse(at.substring(0, 10));
@@ -161,7 +161,7 @@ public class Parser {
             }
             Task t = arr.get(index - 1);
             if (t.getDone().equals("[X]")) {
-                error_code = 9; // task is already marked as not done
+                error_code = 9; // task is already marked as done
                 throw new ReimException(9, command);
             }
         } catch (ReimException e) {
@@ -232,6 +232,9 @@ public class Parser {
             else if (!(command.substring(index + 4).matches("\\d{4}-\\d{2}-\\d{2} \\d{4}") || command.substring(index + 4).matches("\\d{4}-\\d{2}-\\d{2}"))) {
                 throw new ReimException(11, command);
             }
+//            else if (Integer.parseInt(command.substring(index + 9, index + 11)) > 12 || Integer.parseInt(command.substring(index + 13, index + 15)) > 31) {
+//                throw new ReimException(12, command);
+//            }
         }
         catch (ReimException e) {
             return e.getError();

@@ -35,7 +35,7 @@ public class Storage {
         return output;
     }
 
-    public static Task parser(String command) {
+    private static Task parser(String command) {
         String type = String.valueOf(command.charAt(0));
         String done = String.valueOf(command.charAt(4));
         String rest = command.substring(8);
