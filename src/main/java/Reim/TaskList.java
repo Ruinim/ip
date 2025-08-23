@@ -1,6 +1,8 @@
 package Reim;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TaskList {
     protected ArrayList<Task> tasks;
@@ -39,5 +41,10 @@ public class TaskList {
 
     public void remove(int i) {
         this.tasks.remove(i);
+    }
+
+    public TaskList searchList(String s) {
+        Stream<Task> stream = getArray().stream().filter(x -> x.getTask().contains(s));
+        return new TaskList(new ArrayList<Task>(stream.collect(Collectors.toList())));
     }
 }

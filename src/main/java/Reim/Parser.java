@@ -78,6 +78,14 @@ public class Parser {
             this.tasks.remove(Integer.parseInt(taskIndex) - 1);
             finalOutput = "Noted, I've removed this task:\n" + t +"\nNow you have "
                     + this.tasks.size() + " task(s) in the list";
+        } else if (commandType.equals(6)) {
+            String searchCriteria = this.command.substring(5);
+            TaskList t = this.tasks.searchList(searchCriteria);
+            if (t.size() == 0) {
+                finalOutput = "There were no matches in your list\n";
+            } else {
+                finalOutput = "Here are the matching tasks in your list:\n" + listOutput(t);
+            }
         }
         return finalOutput;
     }
@@ -94,6 +102,8 @@ public class Parser {
         }
         else if (command.startsWith("delete")) {
             return 5;
+        } else if (command.startsWith("find")) {
+            return 6;
         }
         return 0;
     }
@@ -108,7 +118,7 @@ public class Parser {
 
     public Integer errorInCommand() {
         // list, todo, event, deadline, mark, unmark
-        String[] command_list = {"list", "todo", "deadline", "event", "mark", "unmark", "delete"};
+        String[] command_list = {"list", "todo", "deadline", "event", "mark", "unmark", "delete", "find"};
         int error_code = 0;
         int count = 0;
         for (int i = 0; i < command_list.length; i++) {
