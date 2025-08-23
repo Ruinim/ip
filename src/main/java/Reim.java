@@ -192,7 +192,7 @@ public class Reim {
 //        return error_code;
         try {
             String taskIndex = command.substring(5); //number
-            if (!intParser(taskIndex)) {
+            if (cannotIntParse(taskIndex)) {
                 error_code = 4;
                 throw new ReimException(4,command);
             }
@@ -212,13 +212,13 @@ public class Reim {
         return error_code;
     }
 
-    public static boolean intParser(String s) {
+    public static boolean cannotIntParse(String s) {
         try {
             Integer.parseInt(s);
-            return true;
+            return false;
         }
         catch (NumberFormatException e) {
-            return false;
+            return true;
         }
     }
 
@@ -238,7 +238,7 @@ public class Reim {
 //        return error_code;
         try {
             String taskIndex = command.substring(7); //number
-            if (!intParser(taskIndex)) {
+            if (cannotIntParse(taskIndex)) {
                 error_code = 4;
                 throw new ReimException(4,command);
             }
@@ -315,7 +315,7 @@ public class Reim {
     public static Integer deleteCheck(String command, ArrayList<Task> arr, Integer error_code) {
         try {
             String taskIndex = command.substring(7); //number
-            if (!intParser(taskIndex)) {
+            if (cannotIntParse(taskIndex)) {
                 throw new ReimException(4, command);
             }
             int index = Integer.parseInt(taskIndex);
