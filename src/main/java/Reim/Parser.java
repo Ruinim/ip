@@ -3,7 +3,15 @@ package Reim;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * Parser is the main class where we check if the command given is valid and to take action on the command afterwards
+ * @author Ruinim
+ */
 public class Parser {
+    /**
+     * command is the command given that Parser needs to check the validity of
+     * tasks is the TaskList of Tasks that we are to use tot check if the command is valid
+     */
     protected String command;
     protected TaskList tasks;
 
@@ -12,6 +20,10 @@ public class Parser {
         this.tasks = tasks;
     }
 
+    /**
+     * processes the task given in the command and adds it to the TaskList
+     * @return string output of the new task to be added to the tasklist
+     * */
     public String addingList() {
         if (this.command.startsWith("todo")) {
             this.tasks.add(new Todo("[ ]", this.command.substring(5)));
@@ -54,6 +66,10 @@ public class Parser {
         return "";
     }
 
+    /**
+     * Acts on the command, acting differently depending on the different commands without addition of new tasks to the TaskList
+     * @return string output of the command
+     */
     public String action() {
         Integer commandType = commandParse(this.command);
         String finalOutput = "";
@@ -82,6 +98,11 @@ public class Parser {
         return finalOutput;
     }
 
+    /**
+     * check which command is to be called (list, mark, unmark, delete)
+     * @param command is the command to be checked
+     * @return An Integer respective to the different possible commands
+     */
     private static Integer commandParse(String command) {
         if (command.equals("list")) {
             return 2;
@@ -98,6 +119,11 @@ public class Parser {
         return 0;
     }
 
+    /**
+     * Lists the entries of the current TaskList
+     * @param arr the TaskList to be printed
+     * @return String output of the entries of the TaskList
+     */
     private static String listOutput(TaskList arr) {
         StringBuilder finalString = new StringBuilder();
         for (int i = 1; i - 1 < arr.size(); i++) {
@@ -106,6 +132,10 @@ public class Parser {
         return finalString.toString();
     }
 
+    /**
+     * Check for any errors in the command that would cause it to be invalid
+     * @return error code integer depending on what error has been detected (0 for no error)
+     */
     public Integer errorInCommand() {
         // list, todo, event, deadline, mark, unmark
         String[] command_list = {"list", "todo", "deadline", "event", "mark", "unmark", "delete"};
@@ -147,7 +177,14 @@ public class Parser {
         return error_code;
     }
 
-    public static Integer markCheck(String command, TaskList arr, Integer error_code){
+    /**
+     * checks for errors relating to the "mark" command
+     * @param command command to be checked
+     * @param arr the current tasklist
+     * @param error_code error code to be returned
+     * @return error code pertaining to the error detected
+     */
+    private static Integer markCheck(String command, TaskList arr, Integer error_code){
         try {
             String taskIndex = command.substring(5); //number
             if (cannotIntParse(taskIndex)) {
@@ -170,7 +207,12 @@ public class Parser {
         return error_code;
     }
 
-    public static boolean cannotIntParse(String s) {
+    /**
+     * Checking if a string can be converted to an integer
+     * @param s string to be tested
+     * @return false if s can be converted to integer, else true
+     */
+    private static boolean cannotIntParse(String s) {
         try {
             Integer.parseInt(s);
             return false;
@@ -180,7 +222,14 @@ public class Parser {
         }
     }
 
-    public static Integer unmarkCheck(String command, TaskList arr, Integer error_code) {
+    /**
+     * checks for errors relating to the "unmark" command
+     * @param command command to be checked
+     * @param arr the current tasklist
+     * @param error_code error code to be returned
+     * @return error code pertaining to the error detected
+     */
+    private static Integer unmarkCheck(String command, TaskList arr, Integer error_code) {
         try {
             String taskIndex = command.substring(7); //number
             if (cannotIntParse(taskIndex)) {
@@ -203,7 +252,13 @@ public class Parser {
         return error_code;
     }
 
-    public static Integer todoCheck(String command, TaskList arr) {
+    /**
+     * checks for errors relating to the "todo" command
+     * @param command command to be checked
+     * @param arr the current tasklist
+     * @return error code pertaining to the error detected
+     */
+    private static Integer todoCheck(String command, TaskList arr) {
         try {
             if (arr.getArray().stream().anyMatch(x -> x.getTask().equals(command.substring(5)))) {
                 //duplicate task
@@ -216,7 +271,13 @@ public class Parser {
         return 0;
     }
 
-    public static Integer deadlineCheck(String command, TaskList arr) {
+    /**
+     * checks for errors relating to the "deadline" command
+     * @param command command to be checked
+     * @param arr the current tasklist
+     * @return error code pertaining to the error detected
+     */
+    private static Integer deadlineCheck(String command, TaskList arr) {
         try {
             if (!command.contains("/by")) { //no /by
                 throw new ReimException(6, command); // invalid arguments: no timing given
@@ -243,7 +304,13 @@ public class Parser {
 
     }
 
-    public static Integer eventCheck(String command, TaskList arr) {
+    /**
+     * checks for errors relating to the "event" command
+     * @param command command to be checked
+     * @param arr the current tasklist
+     * @return error code pertaining to the error detected
+     */
+    private static Integer eventCheck(String command, TaskList arr) {
         try {
             if (!command.contains("/from")) {
                 throw new ReimException(6, command); // invalid arguments: no timing given
@@ -266,7 +333,14 @@ public class Parser {
         return 0;
     }
 
-    public static Integer deleteCheck(String command, TaskList arr, Integer error_code) {
+    /**
+     * checks for errors relating to the "delete" command
+     * @param command command to be checked
+     * @param arr the current tasklist
+     * @param error_code error code to be returned
+     * @return error code pertaining to the error detected
+     */
+    private static Integer deleteCheck(String command, TaskList arr, Integer error_code) {
         try {
             String taskIndex = command.substring(7); //number
             if (cannotIntParse(taskIndex)) {
@@ -276,7 +350,6 @@ public class Parser {
             if (index > arr.size() || index <= 0) {
                 throw new ReimException(5, command);
             }
-//            Reim.Task t = arr.get(Integer.parseInt(taskIndex) - 1);
         } catch (ReimException e) {
             return e.getError(); // invalid command: mark command followed by char when it was meant to be an int
         }

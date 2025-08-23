@@ -5,10 +5,6 @@ import java.time.LocalTime;
 import java.util.Scanner;
 import java.util.ArrayList;
 
-/**
- * main driver class
- * @author Ruinim
- */
 public class Reim {
     private Storage storage;
     private TaskList items;
