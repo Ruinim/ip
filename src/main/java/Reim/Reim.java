@@ -375,23 +375,4 @@ public class Reim {
         }
         return error_code;
     }
-
-//    public static ArrayList<Reim.Task> readFile(String filePath) {
-//        File f = new File(filePath);
-//        ArrayList<Reim.Task> output = new ArrayList<>();
-//        if (!f.exists()) {
-//            return output;
-//        }
-//        try {
-//            Scanner reader = new Scanner(f);
-//            while (reader.hasNextLine()) {
-//                String data = reader.nextLine();
-//                output.add(parser(data));
-//            }
-//        } catch (FileNotFoundException ignored) {
-//
-//        }
-//        return output;
-//    }
-
 }
