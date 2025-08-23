@@ -1,8 +1,8 @@
 public class Event extends Task {
     protected String from;
 
-    public Event(String task, String done, String fm) {
-        super(task, done);
+    public Event(String done, String task, String fm) {
+        super(done, task);
         this.from = fm;
     }
 
@@ -19,5 +19,14 @@ public class Event extends Task {
     @Override
     public String toString() {
         return "[E]" + super.toString() + " (from: " + from + ")";
+    }
+
+    @Override
+    public String formattedString() {
+        String done = "0";
+        if (this.done.equals("[X]")) {
+            done = "1";
+        }
+        return "E | " + done + " | " + this.task + " | " + this.from;
     }
 }

@@ -27,4 +27,8 @@ public class Task {
     public String toString() {
         return this.done + " " + this.task;
     }
+
+    public String formattedString() {
+        return "";
+    }
 }
