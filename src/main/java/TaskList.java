@@ -24,11 +24,11 @@ public class TaskList {
     }
 
     public Task get(String i) {
-        return this.tasks.get(Integer.parseInt(i) - 1);
+        return this.tasks.get(Integer.parseInt(i));
     }
 
     public Task get(int i) {
-        return this.tasks.get(i - 1);
+        return this.tasks.get(i);
     }
 
     public void set(int i, Task t) {

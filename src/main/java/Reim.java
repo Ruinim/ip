@@ -26,7 +26,7 @@ public class Reim {
         // then call adding list
         Storage storage = new Storage(dirPath, filePath);
 //        ArrayList<Task> items = readFile(filePath);
-        ArrayList<Task> items = storage.readFile();
+        TaskList items = storage.readFile();
         Scanner read = new Scanner(System.in);
         while (read.hasNext()) {
             String command = read.nextLine();
@@ -34,14 +34,16 @@ public class Reim {
                 System.out.println(end);
                 break;
             }
-            Integer error = errorInCommand(command, items);
+            Parser parser = new Parser(command, items);
+//            Integer error = errorInCommand(command, items);
+            Integer error = parser.errorInCommand();
             if (error > 0) {
                 System.out.println(new ReimException(error, command).errorMessage());
                 continue;
             }
-            String output = action(command, items);
+            String output = parser.action();
             if (output.isEmpty()){
-                String addition = addingList(command, items);
+                String addition = parser.addingList();
                 output = message("Got it. I've added this task:\n" + addition
                         + "\nNow you have " + items.size() + " task(s) in the list.");
                 // save list into ./data/Reim.txt
@@ -332,96 +334,96 @@ public class Reim {
         return error_code;
     }
 
-    public static ArrayList<Task> readFile(String filePath) {
-        File f = new File(filePath);
-        ArrayList<Task> output = new ArrayList<>();
-        if (!f.exists()) {
-            return output;
-        }
-        try {
-            Scanner reader = new Scanner(f);
-            while (reader.hasNextLine()) {
-                String data = reader.nextLine();
-                output.add(parser(data));
-            }
-        } catch (FileNotFoundException ignored) {
+//    public static ArrayList<Task> readFile(String filePath) {
+//        File f = new File(filePath);
+//        ArrayList<Task> output = new ArrayList<>();
+//        if (!f.exists()) {
+//            return output;
+//        }
+//        try {
+//            Scanner reader = new Scanner(f);
+//            while (reader.hasNextLine()) {
+//                String data = reader.nextLine();
+//                output.add(parser(data));
+//            }
+//        } catch (FileNotFoundException ignored) {
+//
+//        }
+//        return output;
+//    }
+////
+//    public static Task parser(String command) {
+//        String type = String.valueOf(command.charAt(0));
+//        String done = String.valueOf(command.charAt(4));
+//        String rest = command.substring(8);
+//
+//        if (type.equals("T")) {
+//            if (done.equals("1")) {
+//                return new Todo(rest, "[X]");
+//            }
+//            return new Todo("[ ]", rest);
+//        }
+//        else if (type.equals("D")) {
+//            String[] p = rest.split(" \\| ");
+//            String task = p[0];
+//            String time = p[1];
+//            String[] dt = time.split(" ");
+//            if (dt.length == 2) {
+//                LocalDate date = LocalDate.parse(dt[0]);
+//                String timing = dt[1];
+//                LocalTime lt = LocalTime.parse(timing);
+//                if (done.equals("1")) {
+//                    return new Deadline("[X]", task, date, lt);
+//                }
+//                return new Deadline("[ ]", task, date, lt);
+//            }
+//            if (done.equals("1")) {
+//                return new Deadline("[X]", task, time);
+//            }
+//            return new Deadline("[ ]", task, time);
+//        }
+//        // its E
+//        String[] p = rest.split(" \\| ");
+//        String task = p[0];
+//        String time = p[1];
+//        String[] dt = time.split(" ");
+//        if (dt.length == 2) {
+//            LocalDate date = LocalDate.parse(dt[0]);
+//            String timing = dt[1];
+//            LocalTime lt = LocalTime.parse(timing);
+//            if (done.equals("1")) {
+//                return new Event("[X]", task, date, lt);
+//            }
+//            return new Event("[ ]", task, date, lt);
+//        }
+//        if (done.equals("1")) {
+//            return new Event("[X]", task, time);
+//        }
+//        return new Event("[X]", task, time);
+//    }
+//
 
-        }
-        return output;
-    }
-
-    public static Task parser(String command) {
-        String type = String.valueOf(command.charAt(0));
-        String done = String.valueOf(command.charAt(4));
-        String rest = command.substring(8);
-
-        if (type.equals("T")) {
-            if (done.equals("1")) {
-                return new Todo(rest, "[X]");
-            }
-            return new Todo("[ ]", rest);
-        }
-        else if (type.equals("D")) {
-            String[] p = rest.split(" \\| ");
-            String task = p[0];
-            String time = p[1];
-            String[] dt = time.split(" ");
-            if (dt.length == 2) {
-                LocalDate date = LocalDate.parse(dt[0]);
-                String timing = dt[1];
-                LocalTime lt = LocalTime.parse(timing);
-                if (done.equals("1")) {
-                    return new Deadline("[X]", task, date, lt);
-                }
-                return new Deadline("[ ]", task, date, lt);
-            }
-            if (done.equals("1")) {
-                return new Deadline("[X]", task, time);
-            }
-            return new Deadline("[ ]", task, time);
-        }
-        // its E
-        String[] p = rest.split(" \\| ");
-        String task = p[0];
-        String time = p[1];
-        String[] dt = time.split(" ");
-        if (dt.length == 2) {
-            LocalDate date = LocalDate.parse(dt[0]);
-            String timing = dt[1];
-            LocalTime lt = LocalTime.parse(timing);
-            if (done.equals("1")) {
-                return new Event("[X]", task, date, lt);
-            }
-            return new Event("[ ]", task, date, lt);
-        }
-        if (done.equals("1")) {
-            return new Event("[X]", task, time);
-        }
-        return new Event("[X]", task, time);
-    }
-
-
-    public static void saveArray(ArrayList<Task> arr, String dirPath, String filePath){
-        File d = new File(dirPath);
-        File f = new File(d, "Reim.txt");
-        if (!d.exists()) {
-            d.mkdirs();
-        }
-        try {
-            FileWriter writer = new FileWriter(filePath, false);
-            StringBuilder output = new StringBuilder();
-            for (int i = 0; i < arr.size(); i++) {
-                output.append(arr.get(i).formattedString());
-                output.append("\n");
-            }
-            String finalOutput = output.toString();
-            writer.write(finalOutput);
-            writer.close();
-        }
-        catch (IOException ignored) {
-
-        }
-    }
+//    public static void saveArray(ArrayList<Task> arr, String dirPath, String filePath){
+//        File d = new File(dirPath);
+//        File f = new File(d, "Reim.txt");
+//        if (!d.exists()) {
+//            d.mkdirs();
+//        }
+//        try {
+//            FileWriter writer = new FileWriter(filePath, false);
+//            StringBuilder output = new StringBuilder();
+//            for (int i = 0; i < arr.size(); i++) {
+//                output.append(arr.get(i).formattedString());
+//                output.append("\n");
+//            }
+//            String finalOutput = output.toString();
+//            writer.write(finalOutput);
+//            writer.close();
+//        }
+//        catch (IOException ignored) {
+//
+//        }
+//    }
 
 
 }

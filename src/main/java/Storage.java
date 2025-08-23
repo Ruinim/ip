@@ -16,9 +16,9 @@ public class Storage {
         this.fp = filePath;
     }
 
-    public ArrayList<Task> readFile() {
+    public TaskList readFile() {
         File f = new File(this.fp);
-        ArrayList<Task> output = new ArrayList<>();
+        TaskList output = new TaskList();
         if (!f.exists()) {
             return output;
         }
@@ -84,7 +84,7 @@ public class Storage {
         return new Event("[X]", task, time);
     }
 
-    public void saveArray(ArrayList<Task> arr){
+    public void saveArray(TaskList arr){
         File d = new File(this.dp);
         File f = new File(d, "Reim.txt");
         if (!d.exists()) {
