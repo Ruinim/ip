@@ -5,92 +5,54 @@ ____________________________________________________________
 
 ____________________________________________________________
 Got it. I've added this task:
-[T][ ] borrow book
+[T][ ] borrow
 Now you have 1 task(s) in the list.
 ____________________________________________________________
 
 ____________________________________________________________
 Got it. I've added this task:
-[D][ ] assignment  (by:  friday)
+[E][ ] party  (from: Dec 18 2022 12:00)
 Now you have 2 task(s) in the list.
 ____________________________________________________________
 
 ____________________________________________________________
+Error in command: deadline test /by 2022-10-8 2359 ; Time given in wrong format
+____________________________________________________________
+
+____________________________________________________________
 Got it. I've added this task:
-[E][ ] party  (from:  tuesday)
+[D][ ] test  (by: Oct 08 2022 23:59)
 Now you have 3 task(s) in the list.
 ____________________________________________________________
 
 ____________________________________________________________
-Nice! I've marked this task as done:
-[T][X] borrow book
+1. [T][ ] borrow
+2. [E][ ] party  (from: Dec 18 2022 12:00)
+3. [D][ ] test  (by: Oct 08 2022 23:59)
+
 ____________________________________________________________
 
 ____________________________________________________________
 Nice! I've marked this task as done:
-[E][X] party  (from:  tuesday)
-____________________________________________________________
-
-____________________________________________________________
-Noted, I've removed this task:
-[D][ ] assignment  (by:  friday)
-Now you have 2 task(s) in the list
-____________________________________________________________
-
-____________________________________________________________
-OK, I've marked this task as not done yet:
-[E][ ] party  (from:  tuesday)
-____________________________________________________________
-
-____________________________________________________________
-Error in command: unmark 2 ; Task is already marked as not done
+[D][X] test  (by: Oct 08 2022 00:00)
 ____________________________________________________________
 
 ____________________________________________________________
 Got it. I've added this task:
-[T][ ] cook
-Now you have 3 task(s) in the list.
-____________________________________________________________
-
-____________________________________________________________
-Error in command: todo ; missing arguments
-____________________________________________________________
-
-____________________________________________________________
-Error in command: dead ; invalid command: please use the commands list, todo event, deadline, mark, unmark
-____________________________________________________________
-
-____________________________________________________________
-Error in command: hey ; invalid command: please use the commands list, todo event, deadline, mark, unmark
-____________________________________________________________
-
-____________________________________________________________
-Error in command: deadline /by friday ; invalid argument: no task given in command
-____________________________________________________________
-
-____________________________________________________________
-Got it. I've added this task:
-[T][ ] borrow
+[T][ ] temp
 Now you have 4 task(s) in the list.
 ____________________________________________________________
 
 ____________________________________________________________
-Error in command: deadline something ; invalid arguments: no timing given
+Noted, I've removed this task:
+[T][ ] borrow
+Now you have 3 task(s) in the list
 ____________________________________________________________
 
 ____________________________________________________________
-Error in command: event /from now ; invalid argument: no task given in command
-____________________________________________________________
-
-____________________________________________________________
-Error in command: event present ; invalid arguments: no timing given
-____________________________________________________________
-
-____________________________________________________________
-1. [T][X] borrow book
-2. [E][ ] party  (from:  tuesday)
-3. [T][ ] cook
-4. [T][ ] borrow
+1. [E][ ] party  (from: Dec 18 2022 12:00)
+2. [D][X] test  (by: Oct 08 2022 00:00)
+3. [T][ ] temp
 
 ____________________________________________________________
 
