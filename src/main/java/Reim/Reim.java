@@ -444,28 +444,4 @@ public class Reim {
 //        return new Reim.Reim.Event("[X]", task, time);
 //    }
 //
-
-//    public static void saveArray(ArrayList<Reim.Task> arr, String dirPath, String filePath){
-//        File d = new File(dirPath);
-//        File f = new File(d, "Reim.Reim.txt");
-//        if (!d.exists()) {
-//            d.mkdirs();
-//        }
-//        try {
-//            FileWriter writer = new FileWriter(filePath, false);
-//            StringBuilder output = new StringBuilder();
-//            for (int i = 0; i < arr.size(); i++) {
-//                output.append(arr.get(i).formattedString());
-//                output.append("\n");
-//            }
-//            String finalOutput = output.toString();
-//            writer.write(finalOutput);
-//            writer.close();
-//        }
-//        catch (IOException ignored) {
-//
-//        }
-//    }
-
-
 }
