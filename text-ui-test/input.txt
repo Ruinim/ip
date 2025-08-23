@@ -1,0 +1,10 @@
+todo borrow
+event party /from 2022-12-18 1200
+deadline test /by 2022-10-8 2359
+deadline test /by 2022-10-08 2359
+list
+mark 3
+todo temp
+delete 1
+list
+bye
