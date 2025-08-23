@@ -1,10 +1,11 @@
+package Reim;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Storage {
@@ -86,7 +87,7 @@ public class Storage {
 
     public void saveArray(TaskList arr){
         File d = new File(this.dp);
-        File f = new File(d, "Reim.txt");
+        File f = new File(d, "Reim.Reim.txt");
         if (!d.exists()) {
             d.mkdirs();
         }

@@ -1,3 +1,5 @@
+package Reim;
+
 public class ReimException extends Exception{
     private final Integer err;
     private final String command;
@@ -6,7 +8,7 @@ public class ReimException extends Exception{
         this.err = err;
         this.command = command;
     }
-//    public ReimException() {
+//    public Reim.ReimException() {
 //
 //    }
     public Integer getError() {
@@ -19,7 +21,7 @@ public class ReimException extends Exception{
             "missing arguments", "invalid command: list command should not have arguments",
             "invalid command: mark command followed by char when it was meant to be an int",
             "Index out of bounds", "invalid arguments: no timing given", "invalid argument: no task given in command",
-            "Task is already marked as not done", "Task is already marked as done", "Duplicate task", "Time given in wrong format"};
+            "Reim.Task is already marked as not done", "Reim.Task is already marked as done", "Duplicate task", "Time given in wrong format"};
         return "Error in command: " + this.command + " ; " + error_msg[this.err - 1];
     }
 

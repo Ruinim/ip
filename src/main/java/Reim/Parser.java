@@ -1,3 +1,5 @@
+package Reim;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -271,7 +273,7 @@ public class Parser {
             if (index > arr.size() || index <= 0) {
                 throw new ReimException(5, command);
             }
-//            Task t = arr.get(Integer.parseInt(taskIndex) - 1);
+//            Reim.Task t = arr.get(Integer.parseInt(taskIndex) - 1);
         } catch (ReimException e) {
             return e.getError(); // invalid command: mark command followed by char when it was meant to be an int
         }

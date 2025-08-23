@@ -1,3 +1,5 @@
+package Reim;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Scanner;
@@ -36,7 +38,7 @@ public class Reim {
                 String addition = parser.addingList();
                 output = "Got it. I've added this task:\n" + addition
                         + "\nNow you have " + items.size() + " task(s) in the list.";
-                // save list into ./data/Reim.txt
+                // save list into ./data/Reim.Reim.txt
 
             }
 
@@ -47,18 +49,18 @@ public class Reim {
     }
 
     public static void main(String[] args) {
-        new Reim("src/data", "src/data/Reim.txt").run();
-//        Ui ui = new Ui();
+        new Reim("src/data", "src/data/Reim.Reim.txt").run();
+//        Reim.Ui ui = new Reim.Ui();
 //        ui.start();
-//        String filePath = "src/data/Reim.txt";
+//        String filePath = "src/data/Reim.Reim.txt";
 //        String dirPath = "src/data";
-//        // read data from ./data/Reim.txt -> array data
+//        // read data from ./data/Reim.Reim.txt -> array data
 //        // read line, split using | as delimiter
 //        // check first T. D or E
 //        // then call adding list
-//        Storage storage = new Storage(dirPath, filePath);
-////        ArrayList<Task> items = readFile(filePath);
-//        TaskList items = storage.readFile();
+//        Reim.Storage storage = new Reim.Storage(dirPath, filePath);
+////        ArrayList<Reim.Task> items = readFile(filePath);
+//        Reim.TaskList items = storage.readFile();
 //        Scanner read = new Scanner(System.in);
 //        while (read.hasNext()) {
 //            String command = read.nextLine();
@@ -66,11 +68,11 @@ public class Reim {
 //                ui.end();
 //                break;
 //            }
-//            Parser parser = new Parser(command, items);
+//            Reim.Reim.Parser parser = new Reim.Reim.Parser(command, items);
 ////            Integer error = errorInCommand(command, items);
 //            Integer error = parser.errorInCommand();
 //            if (error > 0) {
-//                ui.printError(new ReimException(error, command));
+//                ui.printError(new Reim.ReimException(error, command));
 //                continue;
 //            }
 //            String output = parser.action();
@@ -78,7 +80,7 @@ public class Reim {
 //                String addition = parser.addingList();
 //                output = "Got it. I've added this task:\n" + addition
 //                        + "\nNow you have " + items.size() + " task(s) in the list.";
-//                // save list into ./data/Reim.txt
+//                // save list into ./data/Reim.Reim.txt
 //
 //            }
 //
@@ -362,9 +364,9 @@ public class Reim {
         return error_code;
     }
 
-//    public static ArrayList<Task> readFile(String filePath) {
+//    public static ArrayList<Reim.Task> readFile(String filePath) {
 //        File f = new File(filePath);
-//        ArrayList<Task> output = new ArrayList<>();
+//        ArrayList<Reim.Task> output = new ArrayList<>();
 //        if (!f.exists()) {
 //            return output;
 //        }
@@ -380,16 +382,16 @@ public class Reim {
 //        return output;
 //    }
 ////
-//    public static Task parser(String command) {
+//    public static Reim.Task parser(String command) {
 //        String type = String.valueOf(command.charAt(0));
 //        String done = String.valueOf(command.charAt(4));
 //        String rest = command.substring(8);
 //
 //        if (type.equals("T")) {
 //            if (done.equals("1")) {
-//                return new Todo(rest, "[X]");
+//                return new Reim.Todo(rest, "[X]");
 //            }
-//            return new Todo("[ ]", rest);
+//            return new Reim.Todo("[ ]", rest);
 //        }
 //        else if (type.equals("D")) {
 //            String[] p = rest.split(" \\| ");
@@ -401,14 +403,14 @@ public class Reim {
 //                String timing = dt[1];
 //                LocalTime lt = LocalTime.parse(timing);
 //                if (done.equals("1")) {
-//                    return new Deadline("[X]", task, date, lt);
+//                    return new Reim.Reim.Deadline("[X]", task, date, lt);
 //                }
-//                return new Deadline("[ ]", task, date, lt);
+//                return new Reim.Reim.Deadline("[ ]", task, date, lt);
 //            }
 //            if (done.equals("1")) {
-//                return new Deadline("[X]", task, time);
+//                return new Reim.Reim.Deadline("[X]", task, time);
 //            }
-//            return new Deadline("[ ]", task, time);
+//            return new Reim.Reim.Deadline("[ ]", task, time);
 //        }
 //        // its E
 //        String[] p = rest.split(" \\| ");
@@ -420,20 +422,20 @@ public class Reim {
 //            String timing = dt[1];
 //            LocalTime lt = LocalTime.parse(timing);
 //            if (done.equals("1")) {
-//                return new Event("[X]", task, date, lt);
+//                return new Reim.Reim.Event("[X]", task, date, lt);
 //            }
-//            return new Event("[ ]", task, date, lt);
+//            return new Reim.Reim.Event("[ ]", task, date, lt);
 //        }
 //        if (done.equals("1")) {
-//            return new Event("[X]", task, time);
+//            return new Reim.Reim.Event("[X]", task, time);
 //        }
-//        return new Event("[X]", task, time);
+//        return new Reim.Reim.Event("[X]", task, time);
 //    }
 //
 
-//    public static void saveArray(ArrayList<Task> arr, String dirPath, String filePath){
+//    public static void saveArray(ArrayList<Reim.Task> arr, String dirPath, String filePath){
 //        File d = new File(dirPath);
-//        File f = new File(d, "Reim.txt");
+//        File f = new File(d, "Reim.Reim.txt");
 //        if (!d.exists()) {
 //            d.mkdirs();
 //        }
