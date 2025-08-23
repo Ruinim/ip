@@ -103,7 +103,7 @@ public class Storage {
             writer.close();
         }
         catch (IOException ignored) {
-
+            // refers to if there is nothing to read from file
         }
     }
 }
