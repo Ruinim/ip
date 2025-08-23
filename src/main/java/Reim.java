@@ -24,7 +24,9 @@ public class Reim {
         // read line, split using | as delimiter
         // check first T. D or E
         // then call adding list
-        ArrayList<Task> items = readFile(filePath);
+        Storage storage = new Storage(dirPath, filePath);
+//        ArrayList<Task> items = readFile(filePath);
+        ArrayList<Task> items = storage.readFile();
         Scanner read = new Scanner(System.in);
         while (read.hasNext()) {
             String command = read.nextLine();
@@ -46,7 +48,8 @@ public class Reim {
 
             }
 
-            saveArray(items, dirPath, filePath);
+//            saveArray(items, dirPath, filePath);
+            storage.saveArray(items);
             System.out.println(output);
         }
 

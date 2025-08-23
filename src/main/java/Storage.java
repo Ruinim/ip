@@ -2,18 +2,22 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Storage {
+    protected String dp;
     protected String fp;
 
-    public Storage(String filePath) {
+    public Storage(String dirPath, String filePath) {
+        this.dp = dirPath;
         this.fp = filePath;
     }
 
-    public static ArrayList<Task> readFile(String filePath) {
-        File f = new File(filePath);
+    public ArrayList<Task> readFile() {
+        File f = new File(this.fp);
         ArrayList<Task> output = new ArrayList<>();
         if (!f.exists()) {
             return output;
@@ -37,7 +41,7 @@ public class Storage {
 
         if (type.equals("T")) {
             if (done.equals("1")) {
-                return new Todo(rest, "[X]");
+                return new Todo("[X]", rest);
             }
             return new Todo("[ ]", rest);
         }
@@ -45,6 +49,16 @@ public class Storage {
             String[] p = rest.split(" \\| ");
             String task = p[0];
             String time = p[1];
+            String[] dt = time.split(" ");
+            if (dt.length == 2) {
+                LocalDate date = LocalDate.parse(dt[0]);
+                String timing = dt[1];
+                LocalTime lt = LocalTime.parse(timing);
+                if (done.equals("1")) {
+                    return new Deadline("[X]", task, date, lt);
+                }
+                return new Deadline("[ ]", task, date, lt);
+            }
             if (done.equals("1")) {
                 return new Deadline("[X]", task, time);
             }
@@ -54,20 +68,30 @@ public class Storage {
         String[] p = rest.split(" \\| ");
         String task = p[0];
         String time = p[1];
+        String[] dt = time.split(" ");
+        if (dt.length == 2) {
+            LocalDate date = LocalDate.parse(dt[0]);
+            String timing = dt[1];
+            LocalTime lt = LocalTime.parse(timing);
+            if (done.equals("1")) {
+                return new Event("[X]", task, date, lt);
+            }
+            return new Event("[ ]", task, date, lt);
+        }
         if (done.equals("1")) {
             return new Event("[X]", task, time);
         }
         return new Event("[X]", task, time);
     }
 
-    public static void saveArray(ArrayList<Task> arr, String dirPath, String filePath){
-        File d = new File(dirPath);
+    public void saveArray(ArrayList<Task> arr){
+        File d = new File(this.dp);
         File f = new File(d, "Reim.txt");
         if (!d.exists()) {
             d.mkdirs();
         }
         try {
-            FileWriter writer = new FileWriter(filePath, false);
+            FileWriter writer = new FileWriter(this.fp, false);
             StringBuilder output = new StringBuilder();
             for (int i = 0; i < arr.size(); i++) {
                 output.append(arr.get(i).formattedString());
