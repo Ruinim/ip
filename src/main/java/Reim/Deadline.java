@@ -10,6 +10,7 @@ public class Deadline extends Task {
     protected LocalTime time;
 
     public Deadline(String done, String task, String by) {
+        // if no time stated, assume midnight
         super(done, task);
         this.by = LocalDate.parse(by);
         this.time = LocalTime.parse("00:00");
