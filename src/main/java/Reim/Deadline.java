@@ -6,8 +6,8 @@ import java.time.format.DateTimeFormatter;
 
 public class Deadline extends Task {
 
-    protected LocalDate by;
-    protected LocalTime time;
+    private final LocalDate by;
+    private final LocalTime time;
 
     public Deadline(String done, String task, String by) {
         // if no time stated, assume midnight

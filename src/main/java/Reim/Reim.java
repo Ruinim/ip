@@ -20,6 +20,7 @@ public class Reim {
     public void run() {
         ui.start();
         Scanner read = new Scanner(System.in);
+
         while (read.hasNext()) {
             String command = read.nextLine();
             if (command.equals("bye")) {
@@ -27,12 +28,13 @@ public class Reim {
                 break;
             }
             Parser parser = new Parser(command, items);
-//            Integer error = errorInCommand(command, items);
             Integer error = parser.errorInCommand();
+
             if (error > 0) {
                 ui.printError(new ReimException(error, command));
                 continue;
             }
+
             String output = parser.action();
             if (output.isEmpty()){
                 String addition = parser.addingList();
@@ -42,7 +44,6 @@ public class Reim {
 
             }
 
-//            saveArray(items, dirPath, filePath);
             storage.saveArray(items);
             ui.printOutput(output);
         }

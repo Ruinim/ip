@@ -9,8 +9,8 @@ import java.time.LocalTime;
 import java.util.Scanner;
 
 public class Storage {
-    protected String dp;
-    protected String fp;
+    private final String dp;
+    private final String fp;
 
     public Storage(String dirPath, String filePath) {
         this.dp = dirPath;
@@ -51,6 +51,7 @@ public class Storage {
             String task = p[0];
             String time = p[1];
             String[] dt = time.split(" ");
+
             if (dt.length == 2) {
                 LocalDate date = LocalDate.parse(dt[0]);
                 String timing = dt[1];
@@ -70,6 +71,7 @@ public class Storage {
         String task = p[0];
         String time = p[1];
         String[] dt = time.split(" ");
+
         if (dt.length == 2) {
             LocalDate date = LocalDate.parse(dt[0]);
             String timing = dt[1];
@@ -87,7 +89,7 @@ public class Storage {
 
     public void saveArray(TaskList arr){
         File d = new File(this.dp);
-        File f = new File(d, "Reim.Reim.txt");
+
         if (!d.exists()) {
             d.mkdirs();
         }
@@ -101,8 +103,7 @@ public class Storage {
             String finalOutput = output.toString();
             writer.write(finalOutput);
             writer.close();
-        }
-        catch (IOException ignored) {
+        } catch (IOException ignored) {
             // refers to if there is nothing to read from file
         }
     }

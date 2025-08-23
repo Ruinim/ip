@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Parser {
-    protected String command;
-    protected TaskList tasks;
+    private final String command;
+    private TaskList tasks;
 
     public Parser(String command, TaskList tasks) {
         this.command = command;
@@ -28,8 +28,7 @@ public class Parser {
                 LocalTime time = LocalTime.parse(formatted_timing);
                 this.tasks.add(new Deadline("[ ]", task, date, time));
                 return new Deadline("[ ]", task, date, time).toString();
-            }
-            else {
+            } else {
                 LocalDate date = LocalDate.parse(deadline);
                 this.tasks.add(new Deadline("[ ]", task, date));
                 return new Deadline("[ ]", task, date).toString();
@@ -59,20 +58,17 @@ public class Parser {
         String finalOutput = "";
         if (commandType.equals(2)) { //list
             finalOutput = listOutput(this.tasks);
-        }
-        else if (commandType.equals(3)) { //mark
+        } else if (commandType.equals(3)) { //mark
             String taskIndex = this.command.substring(5); //number
             Task t = this.tasks.get(Integer.parseInt(taskIndex) - 1);
             this.tasks.set(Integer.parseInt(taskIndex) - 1, t.mark());
             finalOutput = "Nice! I've marked this task as done:\n" + t.mark();
-        }
-        else if (commandType.equals(4)) { //unmark
+        } else if (commandType.equals(4)) { //unmark
             String taskIndex = this.command.substring(7); //number
             Task t = this.tasks.get(Integer.parseInt(taskIndex) - 1);
             this.tasks.set(Integer.parseInt(taskIndex) - 1, t.unmark());
             finalOutput = "OK, I've marked this task as not done yet:\n" + t.unmark();
-        }
-        else if (commandType.equals(5)) { //delete
+        } else if (commandType.equals(5)) { //delete
             String taskIndex = this.command.substring(7);
             Task t = this.tasks.get(Integer.parseInt(taskIndex) - 1);
             this.tasks.remove(Integer.parseInt(taskIndex) - 1);
@@ -85,14 +81,11 @@ public class Parser {
     private static Integer commandParse(String command) {
         if (command.equals("list")) {
             return 2;
-        }
-        else if (command.startsWith("mark")) {
+        } else if (command.startsWith("mark")) {
             return 3;
-        }
-        else if (command.startsWith("unmark")) {
+        } else if (command.startsWith("unmark")) {
             return 4;
-        }
-        else if (command.startsWith("delete")) {
+        } else if (command.startsWith("delete")) {
             return 5;
         }
         return 0;
@@ -116,26 +109,19 @@ public class Parser {
                 count++;
                 if (!this.command.equals("list") && this.command.length() < command_list[i].length() + 2) {
                     return 2; // missing arguments
-                }
-                else if (this.command.startsWith("list") && this.command.length() > 4) {
+                } else if (this.command.startsWith("list") && this.command.length() > 4) {
                     return 3; //invalid command: list command does not have arguments
-                }
-                else if (this.command.startsWith("mark")) {
+                } else if (this.command.startsWith("mark")) {
                     error_code = markCheck(this.command, this.tasks, error_code);
-                }
-                else if (this.command.startsWith("unmark")) {
+                } else if (this.command.startsWith("unmark")) {
                     error_code = unmarkCheck(this.command, this.tasks, error_code);
-                }
-                else if (this.command.startsWith("delete")) {
+                } else if (this.command.startsWith("delete")) {
                     error_code = deleteCheck(this.command, this.tasks, error_code);
-                }
-                else if (this.command.startsWith("todo")) {
+                } else if (this.command.startsWith("todo")) {
                     error_code = todoCheck(this.command, this.tasks);
-                }
-                else if (this.command.startsWith("deadline")) {
+                } else if (this.command.startsWith("deadline")) {
                     error_code = deadlineCheck(this.command, this.tasks);
-                }
-                else if (this.command.startsWith("event")) {
+                } else if (this.command.startsWith("event")) {
                     error_code = eventCheck(this.command, this.tasks);
                 }
 
@@ -209,8 +195,7 @@ public class Parser {
                 //duplicate task
                 throw new ReimException(10, command);
             }
-        }
-        catch (ReimException e) {
+        } catch (ReimException e) {
             return 10;
         }
         return 0;
@@ -229,14 +214,14 @@ public class Parser {
             } else if (arr.getArray().stream().anyMatch(x -> x.getTask().equals(command.substring(9, index)))) {
                 throw new ReimException(10, command); //duplicate task
             }
-            else if (!(command.substring(index + 4).matches("\\d{4}-\\d{2}-\\d{2} \\d{4}") || command.substring(index + 4).matches("\\d{4}-\\d{2}-\\d{2}"))) {
+            else if (!(command.substring(index + 4).matches("\\d{4}-\\d{2}-\\d{2} \\d{4}") ||
+                    command.substring(index + 4).matches("\\d{4}-\\d{2}-\\d{2}"))) {
                 throw new ReimException(11, command);
             }
 //            else if (Integer.parseInt(command.substring(index + 9, index + 11)) > 12 || Integer.parseInt(command.substring(index + 13, index + 15)) > 31) {
 //                throw new ReimException(12, command);
 //            }
-        }
-        catch (ReimException e) {
+        } catch (ReimException e) {
             return e.getError();
         }
         return 0;
@@ -255,8 +240,8 @@ public class Parser {
                 throw new ReimException(6, command);
             } else if (arr.getArray().stream().anyMatch(x -> x.getTask().equals(command.substring(6, index)))) {
                 throw new ReimException(10, command); // duplicate task
-            }
-            else if (!(command.substring(index + 6).matches("\\d{4}-\\d{2}-\\d{2} \\d{4}") || command.substring(index + 6).matches("\\d{4}-\\d{2}-\\d{2}"))) {
+            } else if (!(command.substring(index + 6).matches("\\d{4}-\\d{2}-\\d{2} \\d{4}") ||
+                    command.substring(index + 6).matches("\\d{4}-\\d{2}-\\d{2}"))) {
                 throw new ReimException(11, command);
             }
         }
@@ -276,7 +261,6 @@ public class Parser {
             if (index > arr.size() || index <= 0) {
                 throw new ReimException(5, command);
             }
-//            Reim.Task t = arr.get(Integer.parseInt(taskIndex) - 1);
         } catch (ReimException e) {
             return e.getError(); // invalid command: mark command followed by char when it was meant to be an int
         }
