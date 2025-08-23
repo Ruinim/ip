@@ -4,8 +4,15 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Deadline type task
+ * @author Ruinim
+ */
 public class Deadline extends Task {
-
+    /**
+     * by is the date of the deadline task
+     * time is the time of the deadline task
+     */
     protected LocalDate by;
     protected LocalTime time;
 
@@ -28,21 +35,37 @@ public class Deadline extends Task {
         this.time = time;
     }
 
+    /**
+     * marking this task as not done
+     * @return duplicate of task object but unmarked
+     */
     @Override
     public Deadline unmark() {
         return new Deadline("[ ]", this.task, this.by);
     }
 
+    /**
+     * marking this task as done
+     * @return duplicate of task object but marked
+     */
     @Override
     public Deadline mark() {
         return new Deadline("[X]", this.task, this.by);
     }
 
+    /**
+     * String output of object
+     * @return String output of our task
+     */
     @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: " + this.by.format(DateTimeFormatter.ofPattern("MMM dd yyyy")) + " " + this.time.format(DateTimeFormatter.ofPattern("HH:mm"))+ ")";
     }
 
+    /**
+     * output of string to be saved into external file
+     * @return string output to be saved into external file
+     */
     @Override
     public String formattedString() {
         String done = "0";
