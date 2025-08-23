@@ -1,22 +1,22 @@
-import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Scanner;
 import java.util.ArrayList;
 
 public class Reim {
-    public static void main(String[] args) {
-        Ui ui = new Ui();
+    private Storage storage;
+    private TaskList items;
+    private Ui ui;
+
+    public Reim(String dirPath, String filePath) {
+        ui = new Ui();
+        storage = new Storage(dirPath, filePath);
+        items = new TaskList(storage.readFile());
+
+    }
+
+    public void run() {
         ui.start();
-        String filePath = "src/data/Reim.txt";
-        String dirPath = "src/data";
-        // read data from ./data/Reim.txt -> array data
-        // read line, split using | as delimiter
-        // check first T. D or E
-        // then call adding list
-        Storage storage = new Storage(dirPath, filePath);
-//        ArrayList<Task> items = readFile(filePath);
-        TaskList items = storage.readFile();
         Scanner read = new Scanner(System.in);
         while (read.hasNext()) {
             String command = read.nextLine();
@@ -44,10 +44,48 @@ public class Reim {
             storage.saveArray(items);
             ui.printOutput(output);
         }
+    }
 
-
-
-
+    public static void main(String[] args) {
+        new Reim("src/data", "src/data/Reim.txt").run();
+//        Ui ui = new Ui();
+//        ui.start();
+//        String filePath = "src/data/Reim.txt";
+//        String dirPath = "src/data";
+//        // read data from ./data/Reim.txt -> array data
+//        // read line, split using | as delimiter
+//        // check first T. D or E
+//        // then call adding list
+//        Storage storage = new Storage(dirPath, filePath);
+////        ArrayList<Task> items = readFile(filePath);
+//        TaskList items = storage.readFile();
+//        Scanner read = new Scanner(System.in);
+//        while (read.hasNext()) {
+//            String command = read.nextLine();
+//            if (command.equals("bye")) {
+//                ui.end();
+//                break;
+//            }
+//            Parser parser = new Parser(command, items);
+////            Integer error = errorInCommand(command, items);
+//            Integer error = parser.errorInCommand();
+//            if (error > 0) {
+//                ui.printError(new ReimException(error, command));
+//                continue;
+//            }
+//            String output = parser.action();
+//            if (output.isEmpty()){
+//                String addition = parser.addingList();
+//                output = "Got it. I've added this task:\n" + addition
+//                        + "\nNow you have " + items.size() + " task(s) in the list.";
+//                // save list into ./data/Reim.txt
+//
+//            }
+//
+////            saveArray(items, dirPath, filePath);
+//            storage.saveArray(items);
+//            ui.printOutput(output);
+//        }
     }
 
     public static String addingList(String command, ArrayList<Task> arr) {

@@ -7,8 +7,8 @@ public class TaskList {
         this.tasks = new ArrayList<>();
     }
 
-    public TaskList(ArrayList<Task> t) {
-        this.tasks = t;
+    public TaskList(TaskList t) {
+        this.tasks = t.getArray();
     }
 
     public ArrayList<Task> getArray() {
@@ -21,10 +21,6 @@ public class TaskList {
 
     public int size() {
         return this.tasks.size();
-    }
-
-    public Task get(String i) {
-        return this.tasks.get(Integer.parseInt(i));
     }
 
     public Task get(int i) {
