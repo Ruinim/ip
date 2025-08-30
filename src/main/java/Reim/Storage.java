@@ -70,8 +70,7 @@ public class Storage {
                 return new Todo("[X]", rest);
             }
             return new Todo("[ ]", rest);
-        }
-        else if (type.equals("D")) {
+        } else if (type.equals("D")) {
             String[] p = rest.split(" \\| ");
             String task = p[0];
             String time = p[1];

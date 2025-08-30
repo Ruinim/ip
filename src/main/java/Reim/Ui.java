@@ -1,11 +1,15 @@
 package Reim;
 
+import java.util.Scanner;
+
 /**
  * class for most of the printing done by the application
  */
 public class Ui {
+    private Scanner read;
 
     public Ui() {
+        read = new Scanner(System.in);
     }
 
 
@@ -25,6 +29,27 @@ public class Ui {
                 What can I do for you?
                 ____________________________________________________________
                 """);
+    }
+
+    /**
+     * Checks if there is more inputs in the scanner
+     *
+     * @return if there is still inputs in the scanner, return true, else false
+     */
+    public boolean hasMoreInput() {
+        if (this.read.hasNextLine()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Obtains line of input from scanner
+     *
+     * @return next line of scanner
+     */
+    public String showInputLine() {
+        return this.read.nextLine();
     }
 
     /**

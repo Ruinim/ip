@@ -35,16 +35,15 @@ public class Parser {
         if (this.command.startsWith("todo")) {
             this.tasks.add(new Todo("[ ]", this.command.substring(5)));
             return new Todo("[ ]", this.command.substring(5)).toString();
-        }
-        else if (this.command.startsWith("deadline")) {
+        } else if (this.command.startsWith("deadline")) {
             int index = this.command.indexOf("/");
             String task = this.command.substring(9, index - 1);
             String deadline = this.command.substring(index + 4);
             if (deadline.length() == 15) { // yyyy-mm-dd tttt
                 LocalDate date = LocalDate.parse(deadline.substring(0, 10));
                 String timing = deadline.substring(11);
-                String formatted_timing = new StringBuilder(timing).insert(2, ":").toString();
-                LocalTime time = LocalTime.parse(formatted_timing);
+                String formattedTiming = new StringBuilder(timing).insert(2, ":").toString();
+                LocalTime time = LocalTime.parse(formattedTiming);
                 this.tasks.add(new Deadline("[ ]", task, date, time));
                 return new Deadline("[ ]", task, date, time).toString();
             } else {
@@ -52,16 +51,15 @@ public class Parser {
                 this.tasks.add(new Deadline("[ ]", task, date));
                 return new Deadline("[ ]", task, date).toString();
             }
-        }
-        else if (this.command.startsWith("event")) {
+        } else if (this.command.startsWith("event")) {
             int index = this.command.indexOf("/");
             String task = this.command.substring(6, index - 1);
             String at = this.command.substring(index + 6);
             if (at.length() == 15) { // yyyy-mm-dd tttt
                 LocalDate date = LocalDate.parse(at.substring(0, 10));
                 String timing = at.substring(11);
-                String formatted_timing = new StringBuilder(timing).insert(2, ":").toString();
-                LocalTime time = LocalTime.parse(formatted_timing);
+                String formattedTiming = new StringBuilder(timing).insert(2, ":").toString();
+                LocalTime time = LocalTime.parse(formattedTiming);
                 this.tasks.add(new Event("[ ]", task, date, time));
                 return new Event("[ ]", task, date, time).toString();
             }
@@ -148,34 +146,34 @@ public class Parser {
 
     /**
      * Check for any errors in the command that would cause it to be invalid from the possible commands of list,
-     * todo, deadline, event, unamrk , delete and find
+     * todo, deadline, event, unmark , delete and find
      *
      * @return error code integer depending on what error has been detected (0 for no error)
      */
     public Integer errorInCommand() {
         // list, todo, event, deadline, mark, unmark
-        String[] command_list = {"list", "todo", "deadline", "event", "mark", "unmark", "delete", "find"};
-        int error_code = 0;
+        String[] commandList = {"list", "todo", "deadline", "event", "mark", "unmark", "delete", "find"};
+        int errorCode = 0;
         int count = 0;
-        for (int i = 0; i < command_list.length; i++) {
-            if (this.command.startsWith(command_list[i])) {
+        for (int i = 0; i < commandList.length; i++) {
+            if (this.command.startsWith(commandList[i])) {
                 count++;
-                if (!this.command.equals("list") && this.command.length() < command_list[i].length() + 2) {
+                if (!this.command.equals("list") && this.command.length() < commandList[i].length() + 2) {
                     return 2; // missing arguments
                 } else if (this.command.startsWith("list") && this.command.length() > 4) {
                     return 3; //invalid command: list command does not have arguments
                 } else if (this.command.startsWith("mark")) {
-                    error_code = checkMarkCommand(this.command, this.tasks, error_code);
+                    errorCode = checkMarkCommand(this.command, this.tasks, errorCode);
                 } else if (this.command.startsWith("unmark")) {
-                    error_code = checkUnmarkCommand(this.command, this.tasks, error_code);
+                    errorCode = checkUnmarkCommand(this.command, this.tasks, errorCode);
                 } else if (this.command.startsWith("delete")) {
-                    error_code = checkDeleteCommand(this.command, this.tasks, error_code);
+                    errorCode = checkDeleteCommand(this.command, this.tasks, errorCode);
                 } else if (this.command.startsWith("todo")) {
-                    error_code = checkToDoCommand(this.command, this.tasks);
+                    errorCode = checkToDoCommand(this.command, this.tasks);
                 } else if (this.command.startsWith("deadline")) {
-                    error_code = checkDeadlineCommand(this.command, this.tasks);
+                    errorCode = checkDeadlineCommand(this.command, this.tasks);
                 } else if (this.command.startsWith("event")) {
-                    error_code = checkEventCommand(this.command, this.tasks);
+                    errorCode = checkEventCommand(this.command, this.tasks);
                 }
 
             }
@@ -183,7 +181,7 @@ public class Parser {
         if (count < 1) {
             return 1; //invalid command: please use the commands list, todo event, deadline, mark, unmark
         }
-        return error_code;
+        return errorCode;
     }
 
     /**
@@ -192,30 +190,30 @@ public class Parser {
      *
      * @param command command to be checked
      * @param arr the current tasklist
-     * @param error_code error code to be returned
+     * @param errorCode error code to be returned
      * @return error code pertaining to the error detected
      */
-    private static Integer checkMarkCommand(String command, TaskList arr, Integer error_code) {
+    private static Integer checkMarkCommand(String command, TaskList arr, Integer errorCode) {
         try {
             String taskIndex = command.substring(5); //number
             if (checkCannotIntParse(taskIndex)) {
-                error_code = 4;
+                errorCode = 4;
                 throw new ReimException(4, command);
             }
             int index = Integer.parseInt(taskIndex);
             if (index > arr.getSize() || index <= 0) {
-                error_code = 5;
+                errorCode = 5;
                 throw new ReimException(5, command);
             }
             Task t = arr.get(index - 1);
             if (t.getDone().equals("[X]")) {
-                error_code = 9; // task is already marked as done
+                errorCode = 9; // task is already marked as done
                 throw new ReimException(9, command);
             }
         } catch (ReimException e) {
-            return error_code;
+            return errorCode;
         }
-        return error_code;
+        return errorCode;
     }
 
     /**
@@ -228,8 +226,7 @@ public class Parser {
         try {
             Integer.parseInt(s);
             return false;
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             return true;
         }
     }
@@ -240,30 +237,30 @@ public class Parser {
      *
      * @param command command to be checked
      * @param arr the current tasklist
-     * @param error_code error code to be returned
+     * @param errorCode error code to be returned
      * @return error code pertaining to the error detected
      */
-    private static Integer checkUnmarkCommand(String command, TaskList arr, Integer error_code) {
+    private static Integer checkUnmarkCommand(String command, TaskList arr, Integer errorCode) {
         try {
             String taskIndex = command.substring(7); //number
             if (checkCannotIntParse(taskIndex)) {
-                error_code = 4;
+                errorCode = 4;
                 throw new ReimException(4, command);
             }
             int index = Integer.parseInt(taskIndex);
             if (index > arr.getSize()) {
-                error_code = 5;
+                errorCode = 5;
                 throw new ReimException(5, command);
             }
             Task t = arr.get(index - 1);
             if (t.getDone().equals("[ ]")) {
-                error_code = 8; // task is already marked as not done
+                errorCode = 8; // task is already marked as not done
                 throw new ReimException(9, command);
             }
         } catch (ReimException e) {
-            return error_code;
+            return errorCode;
         }
-        return error_code;
+        return errorCode;
     }
 
     /**
@@ -305,8 +302,7 @@ public class Parser {
                 throw new ReimException(6, command);
             } else if (arr.getArray().stream().anyMatch(x -> x.getTask().equals(command.substring(9, index)))) {
                 throw new ReimException(10, command); //duplicate task
-            }
-            else if (!(command.substring(index + 4).matches("\\d{4}-\\d{2}-\\d{2} \\d{4}")
+            } else if (!(command.substring(index + 4).matches("\\d{4}-\\d{2}-\\d{2} \\d{4}")
                     || command.substring(index + 4).matches("\\d{4}-\\d{2}-\\d{2}"))) {
                 throw new ReimException(11, command);
             }
@@ -341,8 +337,7 @@ public class Parser {
                     || command.substring(index + 6).matches("\\d{4}-\\d{2}-\\d{2}"))) {
                 throw new ReimException(11, command);
             }
-        }
-        catch (ReimException e) {
+        } catch (ReimException e) {
             return e.getError();
         }
         return 0;
@@ -354,10 +349,10 @@ public class Parser {
      *
      * @param command command to be checked
      * @param arr the current tasklist
-     * @param error_code error code to be returned
+     * @param errorCode error code to be returned
      * @return error code pertaining to the error detected
      */
-    private static Integer checkDeleteCommand(String command, TaskList arr, Integer error_code) {
+    private static Integer checkDeleteCommand(String command, TaskList arr, Integer errorCode) {
         try {
             String taskIndex = command.substring(7); //number
             if (checkCannotIntParse(taskIndex)) {
@@ -370,6 +365,6 @@ public class Parser {
         } catch (ReimException e) {
             return e.getError(); // invalid command: mark command followed by char when it was meant to be an int
         }
-        return error_code;
+        return errorCode;
     }
 }

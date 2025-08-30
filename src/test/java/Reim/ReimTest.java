@@ -1,19 +1,16 @@
 package Reim;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Scanner;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 public class ReimTest {
     @Test
-    public void errorInCommandTest(){
+    public void errorInCommandTest() {
         ArrayList<Task> tasks = new ArrayList<>();
         tasks.add(new Todo("[ ]", "borrow"));
         tasks.add(new Deadline("[ ]", "test", "2002-12-12"));
@@ -36,7 +33,7 @@ public class ReimTest {
     }
 
     @Test
-    public void saveArrayTest(){
+    public void saveArrayTest() throws ReimException {
         ArrayList<Task> tasks = new ArrayList<>();
         tasks.add(new Event("[ ]", "party", "2022-12-18"));
         tasks.add(new Deadline("[X]", "test", LocalDate.parse("2022-10-08"), LocalTime.parse("10:00")));

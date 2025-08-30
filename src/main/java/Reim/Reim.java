@@ -35,10 +35,9 @@ public class Reim {
      */
     public void run() {
         ui.start();
-        Scanner read = new Scanner(System.in);
 
-        while (read.hasNext()) {
-            String command = read.nextLine();
+        while (ui.hasMoreInput()) {
+            String command = ui.showInputLine();
             if (command.equals("bye")) {
                 ui.end();
                 break;
@@ -64,6 +63,7 @@ public class Reim {
             ui.printOutput(output);
         }
     }
+
 
     public static void main(String[] args) throws ReimException {
         new Reim("src/data", "src/data/Reim.Reim.txt").run();
