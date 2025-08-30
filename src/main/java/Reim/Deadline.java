@@ -16,6 +16,13 @@ public class Deadline extends Task {
     private final LocalDate by;
     private final LocalTime time;
 
+    /**
+     * Constructor method of Deadline for String, String, String
+     *
+     * @param done done status of task
+     * @param task description of task
+     * @param by String of when the deadline is to be converted to LocalDate
+     */
     public Deadline(String done, String task, String by) {
         // if no time stated, assume midnight
         super(done, task);
@@ -23,51 +30,51 @@ public class Deadline extends Task {
         this.time = LocalTime.parse("00:00");
     }
 
+    /**
+     * Constructor method of Deadline for String, String, LocalDate
+     *
+     * @param done done status of task
+     * @param task description of task
+     * @param by when the deadline is
+     */
     public Deadline(String done, String task, LocalDate by) {
         super(done, task);
         this.by = by;
         this.time = LocalTime.parse("00:00");
     }
 
+    /**
+     * constructor method of Deadline for String, String, LocalDate, LocalTime
+     *
+     * @param done done status of task
+     * @param task description of task
+     * @param by when the deadline is
+     * @param time what time is the deadline
+     */
     public Deadline(String done, String task, LocalDate by, LocalTime time) {
         super(done, task);
         this.by = by;
         this.time = time;
     }
 
-    /**
-     * marking this task as not done
-     * @return duplicate of task object but unmarked
-     */
     @Override
     public Deadline unmark() {
         return new Deadline("[ ]", this.task, this.by);
     }
 
-    /**
-     * marking this task as done
-     * @return duplicate of task object but marked
-     */
     @Override
     public Deadline mark() {
         return new Deadline("[X]", this.task, this.by);
     }
 
-    /**
-     * String output of object
-     * @return String output of our task
-     */
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + this.by.format(DateTimeFormatter.ofPattern("MMM dd yyyy")) + " " + this.time.format(DateTimeFormatter.ofPattern("HH:mm"))+ ")";
+        return "[D]" + super.toString() + " (by: " + this.by.format(DateTimeFormatter.ofPattern("MMM dd yyyy"))
+                + " " + this.time.format(DateTimeFormatter.ofPattern("HH:mm")) + ")";
     }
 
-    /**
-     * output of string to be saved into external file
-     * @return string output to be saved into external file
-     */
     @Override
-    public String formattedString() {
+    public String generateFormattedString() {
         String done = "0";
         if (this.done.equals("[X]")) {
             done = "1";

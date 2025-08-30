@@ -12,6 +12,12 @@ public class Task {
     protected String task;
     protected String done;
 
+    /**
+     * Constructor method of Task
+     *
+     * @param d done status of Task
+     * @param t description of Task
+     */
     public Task(String d, String t) {
         this.task = t;
         this.done = d;
@@ -19,6 +25,7 @@ public class Task {
 
     /**
      * get task string
+     *
      * @return task string of object
      */
     public String getTask() {
@@ -27,6 +34,7 @@ public class Task {
 
     /**
      * get done string
+     *
      * @return done string of object
      */
     public String getDone() {
@@ -35,6 +43,7 @@ public class Task {
 
     /**
      * marking this task as not done
+     *
      * @return duplicate of task object but unmarked
      */
     public Task unmark() {
@@ -43,26 +52,24 @@ public class Task {
 
     /**
      * marking this task as done
+     *
      * @return duplicate of task object but marked
      */
     public Task mark() {
         return new Task("[X]", this.task);
     }
 
-    /**
-     * String output of object
-     * @return String output of our task
-     */
     @Override
     public String toString() {
         return this.done + " " + this.task;
     }
 
     /**
-     * method to be overridden in child classes
-     * @return empty string
+     * Generate output of Task for it to be saved into external file
+     *
+     * @return string output of event
      */
-    public String formattedString() {
+    public String generateFormattedString() {
         return "";
     }
 }

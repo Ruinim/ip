@@ -9,7 +9,7 @@ public class Ui {
     }
 
 
-    private static String message(String msg) {
+    private static String messageUiMaking(String msg) {
         return "____________________________________________________________\n"
                 + msg + "\n"
                 + "____________________________________________________________\n";
@@ -38,27 +38,29 @@ public class Ui {
                 """);
     }
 
-    private static String errorOutput(ReimException e) {
-        return message(e.errorMessage());
+    private static String processErrorOutput(ReimException error) {
+        return messageUiMaking(error.getErrorMessage());
     }
 
-    private static String normalOutput(String s) {
-        return message(s);
-    }
-
-    /**
-     * printing of normal output
-     * @param s output of string or command given
-     */
-    public void printOutput(String s) {
-        System.out.println(normalOutput(s));
+    private static String processNormalOutput(String output) {
+        return messageUiMaking(output);
     }
 
     /**
-     * printing of error outputs
-     * @param e exception object to be printed
+     * printing of normal output to be used for successful runs of commands
+     *
+     * @param stringToPrint output of string or command given
      */
-    public void printError(ReimException e) {
-        System.out.println(errorOutput(e));
+    public void printOutput(String stringToPrint) {
+        System.out.println(processNormalOutput(stringToPrint));
+    }
+
+    /**
+     * printing of error outputs to be used when an error is detected
+     *
+     * @param errorToPrint exception object to be printed
+     */
+    public void printError(ReimException errorToPrint) {
+        System.out.println(processErrorOutput(errorToPrint));
     }
 }

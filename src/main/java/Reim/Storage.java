@@ -1,11 +1,11 @@
 package Reim;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Scanner;
 
 /**
@@ -20,6 +20,12 @@ public class Storage {
     private final String dp;
     private final String fp;
 
+    /**
+     * Constructor method for storage
+     *
+     * @param dirPath is the relative directory path of where the file wanted is located
+     * @param filePath is the relative file path of where the file wanted is located
+     */
     public Storage(String dirPath, String filePath) {
         this.dp = dirPath;
         this.fp = filePath;
@@ -27,9 +33,10 @@ public class Storage {
 
     /**
      * Reads the files from the file path given during the creation of the object
+     *
      * @return TaskList generated from the file given
      */
-    public TaskList readFile() {
+    public TaskList readFile() throws ReimException {
         File f = new File(this.fp);
         TaskList output = new TaskList();
         if (!f.exists()) {
@@ -39,20 +46,21 @@ public class Storage {
             Scanner reader = new Scanner(f);
             while (reader.hasNextLine()) {
                 String data = reader.nextLine();
-                output.add(parser(data));
+                output.add(parseLine(data));
             }
         } catch (FileNotFoundException ignored) {
-
+            throw new ReimException(12, "");
         }
         return output;
     }
 
     /**
-     * processes the string commands in the file and coverts them to their respective tasks
+     * processes the string commands in the file and coverts them to their respective tasks to be added into TaskList
+     *
      * @param command the command to process
      * @return the Task generated form the string
      */
-    private static Task parser(String command) {
+    private static Task parseLine(String command) {
         String type = String.valueOf(command.charAt(0));
         String done = String.valueOf(command.charAt(4));
         String rest = command.substring(8);
@@ -106,9 +114,10 @@ public class Storage {
 
     /**
      * Saving the entries of our current TaskList into the file
+     *
      * @param arr taskList to be saved into the external file
      */
-    public void saveArray(TaskList arr){
+    public void saveArray(TaskList arr) {
         File d = new File(this.dp);
 
         if (!d.exists()) {
@@ -117,8 +126,8 @@ public class Storage {
         try {
             FileWriter writer = new FileWriter(this.fp, false);
             StringBuilder output = new StringBuilder();
-            for (int i = 0; i < arr.size(); i++) {
-                output.append(arr.get(i).formattedString());
+            for (int i = 0; i < arr.getSize(); i++) {
+                output.append(arr.get(i).generateFormattedString());
                 output.append("\n");
             }
             String finalOutput = output.toString();

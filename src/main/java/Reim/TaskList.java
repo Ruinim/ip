@@ -9,9 +9,7 @@ import java.util.stream.Stream;
  * @author Ruinim
  */
 public class TaskList {
-    /**
-     * tasks is the arraylist of tasks to wrap
-     */
+    /** tasks is the arraylist of tasks to wrap */
     private ArrayList<Task> tasks;
 
     public TaskList() {
@@ -28,6 +26,7 @@ public class TaskList {
 
     /**
      * get array data of tasklist
+     *
      * @return arraylist of tasks
      */
     public ArrayList<Task> getArray() {
@@ -36,6 +35,7 @@ public class TaskList {
 
     /**
      * adding to the tasklist
+     *
      * @param t is task to be added
      */
     public void add(Task t) {
@@ -44,40 +44,50 @@ public class TaskList {
 
     /**
      * revealing size of tasklist
+     *
      * @return size of tasklist
      */
-    public int size() {
+    public int getSize() {
         return this.tasks.size();
     }
 
     /**
      * obtaining task at index i
-     * @param i is index to be checked
+     *
+     * @param index is index to be checked
      * @return task at index given
      */
-    public Task get(int i) {
-        return this.tasks.get(i);
+    public Task get(int index) {
+        return this.tasks.get(index);
     }
 
     /**
      * setting new task at specified index i
-     * @param i index to be swapped
-     * @param t is new task to be swapped in
+     *
+     * @param index index to be swapped
+     * @param task is new task to be swapped in
      */
-    public void set(int i, Task t) {
-        this.tasks.set(i, t);
+    public void set(int index, Task task) {
+        this.tasks.set(index, task);
     }
 
     /**
      * remove task
+     *
      * @param i is index of task to be removed
      */
     public void remove(int i) {
         this.tasks.remove(i);
     }
 
-    public TaskList searchList(String s) {
-        Stream<Task> stream = getArray().stream().filter(x -> x.getTask().contains(s));
+    /**
+     * Generate a filtered taskList containing only entries that contain the string we are searching for
+     *
+     * @param searchString is the search criteria of this search
+     * @return Filtered tasklist of entries that contain s
+     */
+    public TaskList searchList(String searchString) {
+        Stream<Task> stream = getArray().stream().filter(x -> x.getTask().contains(searchString));
         return new TaskList(new ArrayList<Task>(stream.collect(Collectors.toList())));
     }
 }
