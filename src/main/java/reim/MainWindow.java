@@ -1,4 +1,4 @@
-package Reim;
+package reim;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -22,8 +22,8 @@ public class MainWindow extends AnchorPane {
 
     private Reim reim;
 
-    private Image userImage = new Image(this.getClass().getResourceAsStream("/Reim/images/DaUser.png"));
-    private Image dukeImage = new Image(this.getClass().getResourceAsStream("/Reim/images/DaDuke.png"));
+    private Image userImage = new Image(this.getClass().getResourceAsStream("/reim/images/DaUser.png"));
+    private Image dukeImage = new Image(this.getClass().getResourceAsStream("/reim/images/DaDuke.png"));
 
     @FXML
     public void initialize() {

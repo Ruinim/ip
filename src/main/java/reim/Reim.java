@@ -1,4 +1,4 @@
-package Reim;
+package reim;
 
 /**
  * Reim is the driver class of the entire application

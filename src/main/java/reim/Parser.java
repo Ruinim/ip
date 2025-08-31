@@ -1,4 +1,4 @@
-package Reim;
+package reim;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

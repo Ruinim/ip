@@ -1,4 +1,4 @@
-package Reim;
+package reim;
 
 /**
  * Exception class for our application

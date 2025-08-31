@@ -1,4 +1,4 @@
-package Reim;
+package reim;
 
 import javafx.application.Application;
 

@@ -1,4 +1,4 @@
-package Reim;
+package reim;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -39,7 +39,7 @@ public class ReimTest {
         tasks.add(new Deadline("[X]", "test", LocalDate.parse("2022-10-08"), LocalTime.parse("10:00")));
         tasks.add(new Todo("[ ]", "temp"));
         TaskList t = new TaskList(tasks);
-        Storage store = new Storage("src/test/data/Reim", "src/test/data/Reim/testFile.txt");
+        Storage store = new Storage("src/test/data/reim", "src/test/data/reim/testFile.txt");
         assertEquals(t.getArray().toString(), store.readFile().getArray().toString());
     }
 }

@@ -1,4 +1,4 @@
-package Reim;
+package reim;
 
 import java.io.File;
 import java.io.FileNotFoundException;

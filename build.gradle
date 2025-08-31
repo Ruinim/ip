@@ -42,7 +42,7 @@ test {
 }
 
 application {
-    mainClass.set("Reim.Launcher")
+    mainClass.set("reim.Launcher")
 }
 
 shadowJar {

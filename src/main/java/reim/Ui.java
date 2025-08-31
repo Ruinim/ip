@@ -1,4 +1,4 @@
-package Reim;
+package reim;
 
 import java.util.Scanner;
 
