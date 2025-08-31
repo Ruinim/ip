@@ -80,7 +80,7 @@ public class Parser {
         Integer commandType = commandParse(this.command);
         String finalOutput = "";
         if (commandType.equals(2)) { //list
-            finalOutput = listOutput(this.tasks);
+            finalOutput = showListOutput(this.tasks);
         } else if (commandType.equals(3)) { //mark
             String taskIndex = this.command.substring(5); //number
             Task t = this.tasks.get(Integer.parseInt(taskIndex) - 1);
@@ -103,7 +103,7 @@ public class Parser {
             if (t.getSize() == 0) {
                 finalOutput = "There were no matches in your list\n";
             } else {
-                finalOutput = "Here are the matching tasks in your list:\n" + listOutput(t);
+                finalOutput = "Here are the matching tasks in your list:\n" + showListOutput(t);
             }
         }
         return finalOutput;
@@ -136,7 +136,7 @@ public class Parser {
      * @param arr the TaskList to be printed
      * @return String output of the entries of the TaskList
      */
-    private static String listOutput(TaskList arr) {
+    private static String showListOutput(TaskList arr) {
         StringBuilder finalString = new StringBuilder();
         for (int i = 1; i - 1 < arr.getSize(); i++) {
             finalString.append(i).append(". ").append(arr.get(i - 1).toString()).append("\n");
