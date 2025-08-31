@@ -63,11 +63,24 @@ public class Ui {
                 """);
     }
 
-    private static String processErrorOutput(ReimException error) {
+    /**
+     * Produce string needed for printing the ending statement of the application
+     *
+     * @return String output to be printed when the application is about to close
+     */
+    public String generateEndStatement() {
+        return """
+                ____________________________________________________________
+                Bye. Hope to see you again soon!
+                ____________________________________________________________
+                """;
+    }
+
+    public String processErrorOutput(ReimException error) {
         return messageUiMaking(error.getErrorMessage());
     }
 
-    private static String processNormalOutput(String output) {
+    public String processNormalOutput(String output) {
         return messageUiMaking(output);
     }
 

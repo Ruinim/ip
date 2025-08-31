@@ -141,6 +141,10 @@ public class Parser {
         for (int i = 1; i - 1 < arr.getSize(); i++) {
             finalString.append(i).append(". ").append(arr.get(i - 1).toString()).append("\n");
         }
+        String finalOutput = finalString.toString();
+        if (finalOutput.isEmpty()) {
+            return "The list is currently empty";
+        }
         return finalString.toString();
     }
 

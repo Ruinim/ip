@@ -1,7 +1,5 @@
 package Reim;
 
-import java.util.Scanner;
-
 /**
  * Reim is the driver class of the entire application
  * @author Ruinim
@@ -63,10 +61,36 @@ public class Reim {
             ui.printOutput(output);
         }
     }
+    public String getResponse(String command) {
+        if (command.equals("bye")) {
+            ui.end();
+            return ui.generateEndStatement();
+        }
+        Parser parser = new Parser(command, items);
+        Integer error = parser.errorInCommand();
+
+        if (error > 0) {
+            ui.printError(new ReimException(error, command));
+            return ui.processErrorOutput(new ReimException(error, command));
+        }
+
+        String output = parser.action();
+        if (output.isEmpty()) {
+            String addition = parser.addList();
+            output = "Got it. I've added this task:\n" + addition
+                    + "\nNow you have " + items.getSize() + " task(s) in the list.";
+            // save list into ./data/Reim.Reim.txt
+
+        }
+
+        storage.saveArray(items);
+        ui.printOutput(output);
+        return ui.processNormalOutput(output);
+    }
 
 
     public static void main(String[] args) throws ReimException {
-        new Reim("src/data", "src/data/Reim.Reim.txt").run();
+    //        new Reim("src/data", "src/data/Reim.Reim.txt").run();
 
     }
 }
