@@ -57,11 +57,21 @@ public class Deadline extends Task {
         this.time = time;
     }
 
+    /**
+     * marking this task as not done
+     *
+     * @return duplicate of task object but unmarked
+     */
     @Override
     public Deadline unmark() {
         return new Deadline("[ ]", this.task, this.by);
     }
 
+    /**
+     * marking this task as done
+     *
+     * @return duplicate of task object but marked
+     */
     @Override
     public Deadline mark() {
         return new Deadline("[X]", this.task, this.by);
@@ -73,6 +83,11 @@ public class Deadline extends Task {
                 + " " + this.time.format(DateTimeFormatter.ofPattern("HH:mm")) + ")";
     }
 
+    /**
+     * Generate output of Task for it to be saved into external file
+     *
+     * @return string output of event
+     */
     @Override
     public String generateFormattedString() {
         String done = "0";

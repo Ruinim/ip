@@ -52,11 +52,21 @@ public class Event extends Task {
         this.time = time;
     }
 
+    /**
+     * marking this task as not done
+     *
+     * @return duplicate of task object but unmarked
+     */
     @Override
     public Event unmark() {
         return new Event("[ ]", this.task, this.from);
     }
 
+    /**
+     * marking this task as done
+     *
+     * @return duplicate of task object but marked
+     */
     @Override
     public Event mark() {
         return new Event("[X]", this.task, this.from);
@@ -68,6 +78,11 @@ public class Event extends Task {
                 + " " + this.time.format(DateTimeFormatter.ofPattern("HH:mm")) + ")";
     }
 
+    /**
+     * Generate output of Task for it to be saved into external file
+     *
+     * @return string output of event
+     */
     @Override
     public String generateFormattedString() {
         String done = "0";
