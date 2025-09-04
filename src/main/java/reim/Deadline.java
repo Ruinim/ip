@@ -13,8 +13,8 @@ public class Deadline extends Task {
      * by is the date of the deadline task
      * time is the time of the deadline task
      */
-    private final LocalDate by;
-    private final LocalTime time;
+    private final LocalDate deadlineDate;
+    private final LocalTime deadlineTime;
 
     /**
      * Constructor method of Deadline for String, String, String
@@ -23,11 +23,11 @@ public class Deadline extends Task {
      * @param task description of task
      * @param by String of when the deadline is to be converted to LocalDate
      */
-    public Deadline(String done, String task, String by) {
+    public Deadline(boolean done, String task, String by) {
         // if no time stated, assume midnight
         super(done, task);
-        this.by = LocalDate.parse(by);
-        this.time = LocalTime.parse("00:00");
+        this.deadlineDate = LocalDate.parse(by);
+        this.deadlineTime = LocalTime.parse("00:00");
     }
 
     /**
@@ -37,10 +37,10 @@ public class Deadline extends Task {
      * @param task description of task
      * @param by when the deadline is
      */
-    public Deadline(String done, String task, LocalDate by) {
+    public Deadline(boolean done, String task, LocalDate by) {
         super(done, task);
-        this.by = by;
-        this.time = LocalTime.parse("00:00");
+        this.deadlineDate = by;
+        this.deadlineTime = LocalTime.parse("00:00");
     }
 
     /**
@@ -51,10 +51,10 @@ public class Deadline extends Task {
      * @param by when the deadline is
      * @param time what time is the deadline
      */
-    public Deadline(String done, String task, LocalDate by, LocalTime time) {
+    public Deadline(boolean done, String task, LocalDate by, LocalTime time) {
         super(done, task);
-        this.by = by;
-        this.time = time;
+        this.deadlineDate = by;
+        this.deadlineTime = time;
     }
 
     /**
@@ -64,7 +64,7 @@ public class Deadline extends Task {
      */
     @Override
     public Deadline unmark() {
-        return new Deadline("[ ]", this.task, this.by);
+        return new Deadline(false, this.task, this.deadlineDate, this.deadlineTime);
     }
 
     /**
@@ -74,13 +74,13 @@ public class Deadline extends Task {
      */
     @Override
     public Deadline mark() {
-        return new Deadline("[X]", this.task, this.by);
+        return new Deadline(true, this.task, this.deadlineDate, this.deadlineTime);
     }
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + this.by.format(DateTimeFormatter.ofPattern("MMM dd yyyy"))
-                + " " + this.time.format(DateTimeFormatter.ofPattern("HH:mm")) + ")";
+        return "[D]" + super.toString() + " (by: " + this.deadlineDate.format(DateTimeFormatter.ofPattern("MMM dd yyyy"))
+                + " " + this.deadlineTime.format(DateTimeFormatter.ofPattern("HH:mm")) + ")";
     }
 
     /**
@@ -91,9 +91,9 @@ public class Deadline extends Task {
     @Override
     public String generateFormattedString() {
         String done = "0";
-        if (this.done.equals("[X]")) {
+        if (this.isDone) {
             done = "1";
         }
-        return "D | " + done + " | " + this.task + " | " + this.by + " " + this.time;
+        return "D | " + done + " | " + this.task + " | " + this.deadlineDate + " " + this.deadlineTime;
     }
 }

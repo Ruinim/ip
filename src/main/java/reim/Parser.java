@@ -33,8 +33,8 @@ public class Parser {
      * */
     public String addList() {
         if (this.command.startsWith("todo")) {
-            this.tasks.add(new Todo("[ ]", this.command.substring(5)));
-            return new Todo("[ ]", this.command.substring(5)).toString();
+            this.tasks.add(new Todo(false, this.command.substring(5)));
+            return new Todo(false, this.command.substring(5)).toString();
         } else if (this.command.startsWith("deadline")) {
             int index = this.command.indexOf("/");
             String task = this.command.substring(9, index - 1);
@@ -44,12 +44,12 @@ public class Parser {
                 String timing = deadline.substring(11);
                 String formattedTiming = new StringBuilder(timing).insert(2, ":").toString();
                 LocalTime time = LocalTime.parse(formattedTiming);
-                this.tasks.add(new Deadline("[ ]", task, date, time));
-                return new Deadline("[ ]", task, date, time).toString();
+                this.tasks.add(new Deadline(false, task, date, time));
+                return new Deadline(false, task, date, time).toString();
             } else {
                 LocalDate date = LocalDate.parse(deadline);
-                this.tasks.add(new Deadline("[ ]", task, date));
-                return new Deadline("[ ]", task, date).toString();
+                this.tasks.add(new Deadline(false, task, date));
+                return new Deadline(false, task, date).toString();
             }
         } else if (this.command.startsWith("event")) {
             int index = this.command.indexOf("/");
@@ -60,12 +60,12 @@ public class Parser {
                 String timing = at.substring(11);
                 String formattedTiming = new StringBuilder(timing).insert(2, ":").toString();
                 LocalTime time = LocalTime.parse(formattedTiming);
-                this.tasks.add(new Event("[ ]", task, date, time));
-                return new Event("[ ]", task, date, time).toString();
+                this.tasks.add(new Event(false, task, date, time));
+                return new Event(false, task, date, time).toString();
             }
             LocalDate date = LocalDate.parse(at);
-            this.tasks.add(new Event("[ ]", task, date));
-            return new Event("[ ]", task, date).toString();
+            this.tasks.add(new Event(false, task, date));
+            return new Event(false, task, date).toString();
         }
         return "";
     }
@@ -210,7 +210,7 @@ public class Parser {
                 throw new ReimException(5, command);
             }
             Task t = arr.get(index - 1);
-            if (t.getDone().equals("[X]")) {
+            if (t.getDone()) {
                 errorCode = 9; // task is already marked as done
                 throw new ReimException(9, command);
             }
@@ -257,7 +257,7 @@ public class Parser {
                 throw new ReimException(5, command);
             }
             Task t = arr.get(index - 1);
-            if (t.getDone().equals("[ ]")) {
+            if (!t.getDone()) {
                 errorCode = 8; // task is already marked as not done
                 throw new ReimException(9, command);
             }

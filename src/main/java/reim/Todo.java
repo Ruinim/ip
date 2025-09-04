@@ -6,7 +6,7 @@ package reim;
  */
 public class Todo extends Task {
 
-    public Todo(String done, String task) {
+    public Todo(boolean done, String task) {
         super(done, task);
     }
 
@@ -17,7 +17,7 @@ public class Todo extends Task {
      */
     @Override
     public Todo unmark() {
-        return new Todo("[ ]", this.task);
+        return new Todo(false, this.task);
     }
 
     /**
@@ -27,7 +27,7 @@ public class Todo extends Task {
      */
     @Override
     public Todo mark() {
-        return new Todo("[X]", this.task);
+        return new Todo(true, this.task);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class Todo extends Task {
     @Override
     public String generateFormattedString() {
         String done = "0";
-        if (this.done.equals("[X]")) {
+        if (this.isDone) {
             done = "1";
         }
         return "T | " + done + " | " + this.task;

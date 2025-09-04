@@ -13,7 +13,7 @@ public class Ui {
     }
 
 
-    private static String messageUiMaking(String msg) {
+    private static String makeUiMessage(String msg) {
         return "____________________________________________________________\n"
                 + msg + "\n"
                 + "____________________________________________________________\n";
@@ -77,11 +77,11 @@ public class Ui {
     }
 
     public String processErrorOutput(ReimException error) {
-        return messageUiMaking(error.getErrorMessage());
+        return makeUiMessage(error.getErrorMessage());
     }
 
     public String processNormalOutput(String output) {
-        return messageUiMaking(output);
+        return makeUiMessage(output);
     }
 
     /**

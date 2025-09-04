@@ -9,8 +9,8 @@ import java.time.format.DateTimeFormatter;
  * @author Ruinim
  */
 public class Event extends Task {
-    private final LocalDate from;
-    private final LocalTime time;
+    private final LocalDate startDate;
+    private final LocalTime startTime;
 
     /**
      * Constructor method of Event for String, String and LocalDate
@@ -19,10 +19,10 @@ public class Event extends Task {
      * @param task description of task
      * @param fm from when does the event start
      */
-    public Event(String done, String task, LocalDate fm) {
+    public Event(boolean done, String task, LocalDate fm) {
         super(done, task);
-        this.from = fm;
-        this.time = LocalTime.parse("00:00");
+        this.startDate = fm;
+        this.startTime = LocalTime.parse("00:00");
     }
 
     /**
@@ -32,10 +32,10 @@ public class Event extends Task {
      * @param task description of task
      * @param fm from when does the event start to be converted to LocalDate
      */
-    public Event(String done, String task, String fm) {
+    public Event(boolean done, String task, String fm) {
         super(done, task);
-        this.from = LocalDate.parse(fm);
-        this.time = LocalTime.parse("00:00");
+        this.startDate = LocalDate.parse(fm);
+        this.startTime = LocalTime.parse("00:00");
     }
 
     /**
@@ -46,10 +46,10 @@ public class Event extends Task {
      * @param fm from when does the event start
      * @param time what time does the event start
      */
-    public Event(String done, String task, LocalDate fm, LocalTime time) {
+    public Event(boolean done, String task, LocalDate fm, LocalTime time) {
         super(done, task);
-        this.from = fm;
-        this.time = time;
+        this.startDate = fm;
+        this.startTime = time;
     }
 
     /**
@@ -59,7 +59,7 @@ public class Event extends Task {
      */
     @Override
     public Event unmark() {
-        return new Event("[ ]", this.task, this.from);
+        return new Event(false, this.task, this.startDate, this.startTime);
     }
 
     /**
@@ -69,13 +69,13 @@ public class Event extends Task {
      */
     @Override
     public Event mark() {
-        return new Event("[X]", this.task, this.from);
+        return new Event(true, this.task, this.startDate, this.startTime);
     }
 
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + this.from.format(DateTimeFormatter.ofPattern("MMM dd yyyy"))
-                + " " + this.time.format(DateTimeFormatter.ofPattern("HH:mm")) + ")";
+        return "[E]" + super.toString() + " (from: " + this.startDate.format(DateTimeFormatter.ofPattern("MMM dd yyyy"))
+                + " " + this.startTime.format(DateTimeFormatter.ofPattern("HH:mm")) + ")";
     }
 
     /**
@@ -86,9 +86,9 @@ public class Event extends Task {
     @Override
     public String generateFormattedString() {
         String done = "0";
-        if (this.done.equals("[X]")) {
+        if (this.isDone) {
             done = "1";
         }
-        return "E | " + done + " | " + this.task + " | " + this.from + " " + this.time;
+        return "E | " + done + " | " + this.task + " | " + this.startDate + " " + this.startTime;
     }
 }

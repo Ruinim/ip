@@ -10,7 +10,7 @@ public class Task {
      * done is if we have done this task ([X], [ ])
      */
     protected String task;
-    protected String done;
+    protected boolean isDone;
 
     /**
      * Constructor method of Task
@@ -18,9 +18,9 @@ public class Task {
      * @param d done status of Task
      * @param t description of Task
      */
-    public Task(String d, String t) {
+    public Task(boolean d, String t) {
         this.task = t;
-        this.done = d;
+        this.isDone = d;
     }
 
     /**
@@ -37,8 +37,8 @@ public class Task {
      *
      * @return done string of object
      */
-    public String getDone() {
-        return this.done;
+    public boolean getDone() {
+        return this.isDone;
     }
 
     /**
@@ -47,7 +47,7 @@ public class Task {
      * @return duplicate of task object but unmarked
      */
     public Task unmark() {
-        return new Task("[ ]", this.task);
+        return new Task(false, this.task);
     }
 
     /**
@@ -56,12 +56,12 @@ public class Task {
      * @return duplicate of task object but marked
      */
     public Task mark() {
-        return new Task("[X]", this.task);
+        return new Task(true, this.task);
     }
 
     @Override
     public String toString() {
-        return this.done + " " + this.task;
+        return (this.isDone ? "[X]" : "[ ]") + " " + this.task;
     }
 
     /**

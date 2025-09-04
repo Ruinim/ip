@@ -18,6 +18,11 @@ public class Main extends Application {
     public Main() throws ReimException {
     }
 
+    /**
+     * Driving function that sets up the Ui for the application
+     *
+     * @param stage the stage that the application will start using
+     */
     @Override
     public void start(Stage stage) {
         try {

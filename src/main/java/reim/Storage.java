@@ -17,8 +17,8 @@ public class Storage {
      * dp is the directory path given
      * fp is the file path given
      */
-    private final String dp;
-    private final String fp;
+    private final String directoryPath;
+    private final String filePath;
 
     /**
      * Constructor method for storage
@@ -27,8 +27,8 @@ public class Storage {
      * @param filePath is the relative file path of where the file wanted is located
      */
     public Storage(String dirPath, String filePath) {
-        this.dp = dirPath;
-        this.fp = filePath;
+        this.directoryPath = dirPath;
+        this.filePath = filePath;
     }
 
     /**
@@ -37,7 +37,7 @@ public class Storage {
      * @return TaskList generated from the file given
      */
     public TaskList readFile() throws ReimException {
-        File f = new File(this.fp);
+        File f = new File(this.filePath);
         TaskList output = new TaskList();
         if (!f.exists()) {
             return output;
@@ -67,9 +67,9 @@ public class Storage {
 
         if (type.equals("T")) {
             if (done.equals("1")) {
-                return new Todo("[X]", rest);
+                return new Todo(true, rest);
             }
-            return new Todo("[ ]", rest);
+            return new Todo(false, rest);
         } else if (type.equals("D")) {
             String[] p = rest.split(" \\| ");
             String task = p[0];
@@ -81,14 +81,14 @@ public class Storage {
                 String timing = dt[1];
                 LocalTime lt = LocalTime.parse(timing);
                 if (done.equals("1")) {
-                    return new Deadline("[X]", task, date, lt);
+                    return new Deadline(true, task, date, lt);
                 }
-                return new Deadline("[ ]", task, date, lt);
+                return new Deadline(false, task, date, lt);
             }
             if (done.equals("1")) {
-                return new Deadline("[X]", task, time);
+                return new Deadline(true, task, time);
             }
-            return new Deadline("[ ]", task, time);
+            return new Deadline(false, task, time);
         }
         // its E
         String[] p = rest.split(" \\| ");
@@ -101,14 +101,14 @@ public class Storage {
             String timing = dt[1];
             LocalTime lt = LocalTime.parse(timing);
             if (done.equals("1")) {
-                return new Event("[X]", task, date, lt);
+                return new Event(true, task, date, lt);
             }
-            return new Event("[ ]", task, date, lt);
+            return new Event(false, task, date, lt);
         }
         if (done.equals("1")) {
-            return new Event("[X]", task, time);
+            return new Event(true, task, time);
         }
-        return new Event("[X]", task, time);
+        return new Event(false, task, time);
     }
 
     /**
@@ -117,13 +117,13 @@ public class Storage {
      * @param arr taskList to be saved into the external file
      */
     public void saveArray(TaskList arr) {
-        File d = new File(this.dp);
+        File d = new File(this.directoryPath);
 
         if (!d.exists()) {
             d.mkdirs();
         }
         try {
-            FileWriter writer = new FileWriter(this.fp, false);
+            FileWriter writer = new FileWriter(this.filePath, false);
             StringBuilder output = new StringBuilder();
             for (int i = 0; i < arr.getSize(); i++) {
                 output.append(arr.get(i).generateFormattedString());

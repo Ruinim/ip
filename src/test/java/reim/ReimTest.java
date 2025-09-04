@@ -12,9 +12,9 @@ public class ReimTest {
     @Test
     public void errorInCommandTest() {
         ArrayList<Task> tasks = new ArrayList<>();
-        tasks.add(new Todo("[ ]", "borrow"));
-        tasks.add(new Deadline("[ ]", "test", "2002-12-12"));
-        tasks.add(new Event("[X]", "party", "2002-12-12"));
+        tasks.add(new Todo(false, "borrow"));
+        tasks.add(new Deadline(false, "test", "2002-12-12"));
+        tasks.add(new Event(true, "party", "2002-12-12"));
         TaskList t = new TaskList(tasks);
         Parser parse = new Parser("todo run", t);
         Integer error = parse.errorInCommand();
@@ -35,9 +35,9 @@ public class ReimTest {
     @Test
     public void saveArrayTest() throws ReimException {
         ArrayList<Task> tasks = new ArrayList<>();
-        tasks.add(new Event("[ ]", "party", "2022-12-18"));
-        tasks.add(new Deadline("[X]", "test", LocalDate.parse("2022-10-08"), LocalTime.parse("10:00")));
-        tasks.add(new Todo("[ ]", "temp"));
+        tasks.add(new Event(false, "party", "2022-12-18"));
+        tasks.add(new Deadline(true, "test", LocalDate.parse("2022-10-08"), LocalTime.parse("10:00")));
+        tasks.add(new Todo(false, "temp"));
         TaskList t = new TaskList(tasks);
         Storage store = new Storage("src/test/data/reim", "src/test/data/reim/testFile.txt");
         assertEquals(t.getArray().toString(), store.readFile().getArray().toString());
