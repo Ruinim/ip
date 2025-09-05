@@ -90,7 +90,7 @@ public class Reim {
 
 
     public static void main(String[] args) throws ReimException {
-    //        new Reim("src/data", "src/data/Reim.Reim.txt").run();
+        new Reim("src/data", "src/data/reim.txt").run();
 
     }
 }
