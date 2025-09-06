@@ -2,6 +2,7 @@ package reim;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 
 /**
  * Parser is the main class where we check if the command given is valid and to take action on the command afterwards
@@ -40,12 +41,15 @@ public class Parser {
             String task = this.command.substring(9, index - 1);
             String deadline = this.command.substring(index + 4);
             if (deadline.length() == 15) { // yyyy-mm-dd tttt
-                LocalDate date = LocalDate.parse(deadline.substring(0, 10));
-                String timing = deadline.substring(11);
-                String formattedTiming = new StringBuilder(timing).insert(2, ":").toString();
+                String dateString = deadline.substring(0, 10);
+                String timingString = deadline.substring(11);
+                String formattedTiming = new StringBuilder(timingString).insert(2, ":").toString();
+
+                LocalDate date = LocalDate.parse(dateString);
                 LocalTime time = LocalTime.parse(formattedTiming);
                 this.tasks.add(new Deadline(false, task, date, time));
                 return new Deadline(false, task, date, time).toString();
+
             } else {
                 LocalDate date = LocalDate.parse(deadline);
                 this.tasks.add(new Deadline(false, task, date));
@@ -56,9 +60,11 @@ public class Parser {
             String task = this.command.substring(6, index - 1);
             String at = this.command.substring(index + 6);
             if (at.length() == 15) { // yyyy-mm-dd tttt
-                LocalDate date = LocalDate.parse(at.substring(0, 10));
-                String timing = at.substring(11);
-                String formattedTiming = new StringBuilder(timing).insert(2, ":").toString();
+                String dateString = at.substring(0, 10);
+                String timingString = at.substring(11);
+                String formattedTiming = new StringBuilder(timingString).insert(2, ":").toString();
+
+                LocalDate date = LocalDate.parse(dateString);
                 LocalTime time = LocalTime.parse(formattedTiming);
                 this.tasks.add(new Event(false, task, date, time));
                 return new Event(false, task, date, time).toString();
@@ -70,6 +76,24 @@ public class Parser {
         return "";
     }
 
+    private static boolean canStringConvertToLocalDate(String dateString) {
+        try {
+            LocalDate time = LocalDate.parse(dateString);
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+        return true;
+    }
+
+    private static boolean canStringConvertToLocalTime(String timeString) {
+        try {
+            LocalTime time = LocalTime.parse(timeString);
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Acts on the command, acting differently depending on the different
      * commands without addition of new tasks to the TaskList
@@ -79,6 +103,7 @@ public class Parser {
     public String action() {
         Integer commandType = commandParse(this.command);
         String finalOutput = "";
+        assert commandType > 0 && commandType < 7;
         if (commandType.equals(2)) { //list
             finalOutput = showListOutput(this.tasks);
         } else if (commandType.equals(3)) { //mark
@@ -127,7 +152,7 @@ public class Parser {
         } else if (command.startsWith("find")) {
             return 6;
         }
-        return 0;
+        return 1;
     }
 
     /**
@@ -158,10 +183,10 @@ public class Parser {
         // list, todo, event, deadline, mark, unmark
         String[] commandList = {"list", "todo", "deadline", "event", "mark", "unmark", "delete", "find"};
         int errorCode = 0;
-        int count = 0;
+        boolean isACommand = false;
         for (int i = 0; i < commandList.length; i++) {
             if (this.command.startsWith(commandList[i])) {
-                count++;
+                isACommand = true;
                 if (!this.command.equals("list") && this.command.length() < commandList[i].length() + 2) {
                     return 2; // missing arguments
                 } else if (this.command.startsWith("list") && this.command.length() > 4) {
@@ -182,7 +207,7 @@ public class Parser {
 
             }
         }
-        if (count < 1) {
+        if (!isACommand) {
             return 1; //invalid command: please use the commands list, todo event, deadline, mark, unmark
         }
         return errorCode;
@@ -276,7 +301,7 @@ public class Parser {
      */
     private static Integer checkToDoCommand(String command, TaskList arr) {
         try {
-            if (arr.getArray().stream().anyMatch(x -> x.getTask().equals(command.substring(5)))) {
+            if (checkForDuplicate(command, arr, 5, command.length() + 1)) {
                 //duplicate task
                 throw new ReimException(10, command);
             }
@@ -295,26 +320,103 @@ public class Parser {
      * @return error code pertaining to the error detected
      */
     private static Integer checkDeadlineCommand(String command, TaskList arr) {
+        Integer startOfTaskIndex = 9;
+        Integer offset = 4;
         try {
-            if (!command.contains("/by")) { //no /by
+            if (checkForNoSecondPart(command, "/by")) { //no /by
                 throw new ReimException(6, command); // invalid arguments: no timing given
             }
             int index = command.indexOf("/");
-            if (command.substring(9, index).isEmpty()) {
+            if (checkForNoTaskPresent(command, startOfTaskIndex, index)) {
+                System.out.println(7);
                 throw new ReimException(7, command); // invalid argument: no task given in command
-            } else if (command.substring(index + 3).isEmpty()) {
+            } else if (checkForNoTiming(command, index, offset)) {
+                System.out.println(6);
                 throw new ReimException(6, command);
-            } else if (arr.getArray().stream().anyMatch(x -> x.getTask().equals(command.substring(9, index)))) {
+            } else if (checkForDuplicate(command, arr, startOfTaskIndex, index)) {
+                System.out.println(10);
                 throw new ReimException(10, command); //duplicate task
-            } else if (!(command.substring(index + 4).matches("\\d{4}-\\d{2}-\\d{2} \\d{4}")
-                    || command.substring(index + 4).matches("\\d{4}-\\d{2}-\\d{2}"))) {
+            } else if (checkForWrongTimingFormat(command, index, offset)) {
+                System.out.println(11);
                 throw new ReimException(11, command);
+            } else if (checkCannotConvertToLocalDateTime(command, index, offset)) {
+                System.out.println(13);
+                throw new ReimException(13, command);
             }
         } catch (ReimException e) {
             return e.getError();
         }
         return 0;
+    }
 
+    private static boolean checkForNoSecondPart(String command, String checkCriteria) {
+        try {
+            assert command.contains(checkCriteria);
+        } catch (AssertionError e) {
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean checkForNoTaskPresent(String command, Integer startIndex, Integer endIndex) {
+        try {
+            assert command.substring(startIndex, endIndex).isEmpty();
+        } catch (AssertionError e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    private static boolean checkForNoTiming(String command, Integer index, Integer offset) {
+        try {
+            assert command.substring(index + offset - 1).isEmpty();
+        } catch (AssertionError e) {
+            return false;
+        }
+        return true;
+    }
+
+    private static boolean checkForDuplicate(String command, TaskList tasks, Integer startIndex, Integer endIndex) {
+        try {
+            assert tasks.getArray().stream().anyMatch(x -> x.getTask()
+                    .equals(command.substring(startIndex, endIndex - 1)));
+        } catch (AssertionError e) {
+            return false;
+        }
+        return true;
+    }
+
+    private static boolean checkForWrongTimingFormat(String command, Integer index, Integer offset) {
+        try {
+            assert command.substring(index + offset).matches("\\d{4}-\\d{2}-\\d{2} \\d{4}")
+                    || command.substring(index + offset).matches("\\d{4}-\\d{2}-\\d{2}");
+        } catch (AssertionError e) {
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean checkCannotConvertToLocalDateTime(String command, Integer index, Integer offset) {
+        String deadline = command.substring(index + offset);
+        if (deadline.length() == 15) { // yyyy-mm-dd tttt
+            String dateString = deadline.substring(0, 10);
+            String timingString = deadline.substring(11);
+            String formattedTiming = new StringBuilder(timingString).insert(2, ":").toString();
+            try {
+                assert canStringConvertToLocalDate(dateString);
+                assert canStringConvertToLocalTime(formattedTiming);
+            } catch (AssertionError e) {
+                return true;
+            }
+        } else {
+            try {
+                assert canStringConvertToLocalDate(deadline);
+            } catch (AssertionError e) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -326,20 +428,23 @@ public class Parser {
      * @return error code pertaining to the error detected
      */
     private static Integer checkEventCommand(String command, TaskList arr) {
+        Integer startOfTaskIndex = 6;
+        Integer offset = 6;
         try {
-            if (!command.contains("/from")) {
+            if (checkForNoSecondPart(command, "/from")) {
                 throw new ReimException(6, command); // invalid arguments: no timing given
             }
             int index = command.indexOf("/");
-            if (command.substring(6, index).isEmpty()) {
+            if (checkForNoTaskPresent(command, startOfTaskIndex, index)) {
                 throw new ReimException(7, command); // invalid argument: no task given in command
-            } else if (command.substring(index + 5).isEmpty()) {
+            } else if (checkForNoTiming(command, index, offset)) {
                 throw new ReimException(6, command);
-            } else if (arr.getArray().stream().anyMatch(x -> x.getTask().equals(command.substring(6, index)))) {
+            } else if (checkForDuplicate(command, arr, startOfTaskIndex, index)) {
                 throw new ReimException(10, command); // duplicate task
-            } else if (!(command.substring(index + 6).matches("\\d{4}-\\d{2}-\\d{2} \\d{4}")
-                    || command.substring(index + 6).matches("\\d{4}-\\d{2}-\\d{2}"))) {
+            } else if (checkForWrongTimingFormat(command, index, offset)) {
                 throw new ReimException(11, command);
+            } else if (checkCannotConvertToLocalDateTime(command, index, offset)) {
+                throw new ReimException(13, command);
             }
         } catch (ReimException e) {
             return e.getError();
