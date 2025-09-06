@@ -56,11 +56,25 @@ public class Parser {
         return "";
     }
 
+    /**
+     * Method to add the new todo event into the tasklist
+     *
+     * @param command the command that contains the task to be added
+     * @param tasks our current tasklist
+     * @return the todo object that was added
+     */
     private static String addToDoToList(String command, TaskList tasks) {
         tasks.add(new Todo(false, command.substring(5)));
         return new Todo(false, command.substring(5)).toString();
     }
 
+    /**
+     * Method to add the new deadline task into the tasklist
+     *
+     * @param command the command that contains the task details
+     * @param tasks our current tasklist
+     * @return the deadline object that was added
+     */
     private static String addDeadlineToList(String command, TaskList tasks) {
         int index = command.indexOf("/");
         String task = command.substring(9, index - 1);
@@ -82,6 +96,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Method to add the new event task into the tasklist
+     *
+     * @param command the command that contains the task details
+     * @param tasks our current tasklist
+     * @return the event object that was added
+     */
     private static String addEventToList(String command, TaskList tasks) {
         int index = command.indexOf("/");
         String task = command.substring(6, index - 1);
@@ -101,6 +122,12 @@ public class Parser {
         return new Event(false, task, date).toString();
     }
 
+    /**
+     * check to see if the string given can be converted to LocalDate object without error
+     *
+     * @param dateString the string to be checked
+     * @return true if string can be converted, else false
+     */
     private static boolean canStringConvertToLocalDate(String dateString) {
         try {
             LocalDate time = LocalDate.parse(dateString);
@@ -110,6 +137,12 @@ public class Parser {
         return true;
     }
 
+    /**
+     * Check to see if the string given can be converted to LocalTime object without error
+     *
+     * @param timeString the string to be checked
+     * @return true if string can be converted, else false
+     */
     private static boolean canStringConvertToLocalTime(String timeString) {
         try {
             LocalTime time = LocalTime.parse(timeString);
@@ -369,6 +402,13 @@ public class Parser {
         return NO_ERROR;
     }
 
+    /**
+     * check if the command includes the delimiter used to separate different parts of the command
+     *
+     * @param command the command string to be checked for
+     * @param checkCriteria the delimiter to check if there is anything behind ( "/by" and "/from")
+     * @return true if delimiter is absent, else false
+     */
     private static boolean checkForNoSecondPart(String command, String checkCriteria) {
         try {
             assert command.contains(checkCriteria);
@@ -378,6 +418,14 @@ public class Parser {
         return false;
     }
 
+    /**
+     * check if the command has a task
+     *
+     * @param command command string to be checked
+     * @param startIndex the start of the task string
+     * @param endIndex end of the task string
+     * @return true if there is no task string to be found, else false
+     */
     private static boolean checkForNoTaskPresent(String command, Integer startIndex, Integer endIndex) {
         try {
             assert command.substring(startIndex, endIndex).isEmpty();
@@ -388,6 +436,14 @@ public class Parser {
         return true;
     }
 
+    /**
+     * check if the command has a date argument
+     *
+     * @param command command string to be checked
+     * @param index index of /from or /by
+     * @param offset the length of /from or /by to push index to the date/time
+     * @return true if there is no date argument, else false
+     */
     private static boolean checkForNoTiming(String command, Integer index, Integer offset) {
         try {
             assert command.substring(index + offset - 1).isEmpty();
@@ -397,6 +453,15 @@ public class Parser {
         return true;
     }
 
+    /**
+     * check if the task being added is already in the list
+     *
+     * @param command command string to be checked
+     * @param tasks our current tasklist
+     * @param startIndex starting index of the task
+     * @param endIndex ending index of the task
+     * @return true if task can be found already in the tasklist, else false
+     */
     private static boolean checkForDuplicate(String command, TaskList tasks, Integer startIndex, Integer endIndex) {
         try {
             assert tasks.getArray().stream().anyMatch(x -> x.getTask()
@@ -407,6 +472,14 @@ public class Parser {
         return true;
     }
 
+    /**
+     * check if the timing given is of the wrong format
+     *
+     * @param command command string to be checked
+     * @param index index of /from or /by
+     * @param offset the length of /from or /by to push index to the date/time
+     * @return true if date/time given does not follow the required format, else false
+     */
     private static boolean checkForWrongTimingFormat(String command, Integer index, Integer offset) {
         try {
             boolean followsYearWithTimeFormat = command.substring(index + offset)
@@ -419,6 +492,14 @@ public class Parser {
         return false;
     }
 
+    /**
+     * check if the date/time string can be converted to LocalDate and LocaTime
+     *
+     * @param command command to be checked
+     * @param index index of /from or /by
+     * @param offset the length of /from or /by to push index to the date/time
+     * @return true if the date/time string cannot be converted, else false
+     */
     private static boolean checkCannotConvertToLocalDateTime(String command, Integer index, Integer offset) {
         String deadline = command.substring(index + offset);
         if (deadline.length() == 15) { // yyyy-mm-dd tttt

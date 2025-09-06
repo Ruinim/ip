@@ -8,6 +8,9 @@ import java.util.Scanner;
 public class Ui {
     private Scanner read;
 
+    /**
+     * constructor method of Ui
+     */
     public Ui() {
         read = new Scanner(System.in);
     }

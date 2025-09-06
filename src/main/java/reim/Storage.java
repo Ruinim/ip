@@ -76,6 +76,13 @@ public class Storage {
         return parseEvent(done, rest);
     }
 
+    /**
+     * generate the todo task to be added to the list
+     *
+     * @param done the done status of the task
+     * @param task the descriptor of the task
+     * @return the new todo object
+     */
     private static Todo parseTodo(String done, String task) {
         if (done.equals("1")) {
             return new Todo(true, task);
@@ -83,6 +90,13 @@ public class Storage {
         return new Todo(false, task);
     }
 
+    /**
+     * generate the deadline task to be added to the list
+     *
+     * @param done the done status of the task
+     * @param restOfCommand the descriptor of the task and the date/time
+     * @return the new deadline object
+     */
     private static Deadline parseDeadline(String done, String restOfCommand) {
         String[] p = restOfCommand.split(" \\| ");
         String task = p[0];
@@ -104,6 +118,13 @@ public class Storage {
         return new Deadline(false, task, time);
     }
 
+    /**
+     * generate the event task to be added to the list
+     *
+     * @param done the done status of the task
+     * @param restOfCommand the descriptor of the task and the date/time
+     * @return the new deadline object
+     */
     private static Event parseEvent(String done, String restOfCommand) {
         String[] p = restOfCommand.split(" \\| ");
         String task = p[0];
