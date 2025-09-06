@@ -44,7 +44,7 @@ public class ReimException extends Exception {
             "Index out of bounds", "invalid arguments: no timing given", "invalid argument: no task given in command",
             "Task is already marked as not done", "Task is already marked as done", "Duplicate task",
             "Time given in wrong format", "Note: no file to read from",
-            "String given cannot be converted to LocalDate/LocalTime"};
+            "String given cannot be converted to LocalDate/LocalTime", "Write to file failed"};
         return "Error in command: " + this.command + " ; " + errorMsg[this.err - 1];
     }
 

@@ -29,7 +29,7 @@ public class Reim {
     }
 
     /**
-     * driver method
+     * driver method to run manually (without the GUI)
      */
     public void run() {
         ui.start();
@@ -61,6 +61,13 @@ public class Reim {
             ui.printOutput(output);
         }
     }
+
+    /**
+     * To parse and obtain the response from the command received from the user input in GUI mode
+     *
+     * @param command the command to parse and reply
+     * @return the reply string of the command
+     */
     public String getResponse(String command) {
         if (command.equals("bye")) {
             ui.end();
@@ -80,7 +87,6 @@ public class Reim {
             output = "Got it. I've added this task:\n" + addition
                     + "\nNow you have " + items.getSize() + " task(s) in the list.";
             // save list into ./data/Reim.Reim.txt
-
         }
 
         storage.saveArray(items);
