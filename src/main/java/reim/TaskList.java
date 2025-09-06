@@ -87,7 +87,7 @@ public class TaskList {
      * @return Filtered tasklist of entries that contain s
      */
     public TaskList searchList(String searchString) {
-        Stream<Task> stream = getArray().stream().filter(x -> x.getTask().contains(searchString));
+        Stream<Task> stream = getArray().stream().filter(x -> x.getTask().startsWith(searchString));
         return new TaskList(new ArrayList<Task>(stream.collect(Collectors.toList())));
     }
 }

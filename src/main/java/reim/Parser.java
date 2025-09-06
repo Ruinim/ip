@@ -22,6 +22,14 @@ public class Parser {
     static final Integer DUPLICATE_TASK = 10;
     static final Integer TIME_WRONG_FORMAT = 11;
     static final Integer CANNOT_CONVERT_TO_LOCALDATETIME = 13;
+
+    static final Integer ADD = 51;
+    static final Integer LIST = 52;
+    static final Integer MARK = 53;
+    static final Integer UNMARK = 54;
+    static final Integer DELETE = 55;
+    static final Integer FIND = 56;
+    static final Integer UPDATE = 57;
     /**
      * command is the command given that Parser needs to check the validity of
      * tasks is the TaskList of Tasks that we are to use tot check if the command is valid
@@ -116,10 +124,11 @@ public class Parser {
             LocalTime time = LocalTime.parse(formattedTiming);
             tasks.add(new Event(false, task, date, time));
             return new Event(false, task, date, time).toString();
+        } else {
+            LocalDate date = LocalDate.parse(at);
+            tasks.add(new Event(false, task, date));
+            return new Event(false, task, date).toString();
         }
-        LocalDate date = LocalDate.parse(at);
-        tasks.add(new Event(false, task, date));
-        return new Event(false, task, date).toString();
     }
 
     /**
@@ -161,35 +170,185 @@ public class Parser {
     public String action() {
         Integer commandType = commandParse(this.command);
         String finalOutput = "";
-        assert commandType > 0 && commandType < 7;
-        if (commandType.equals(2)) { //list
+        assert commandType > ADD - 1 && commandType < UPDATE + 1;
+        if (commandType.equals(LIST)) { //list
             finalOutput = showListOutput(this.tasks);
-        } else if (commandType.equals(3)) { //mark
-            String taskIndex = this.command.substring(5); //number
-            Task t = this.tasks.get(Integer.parseInt(taskIndex) - 1);
-            this.tasks.set(Integer.parseInt(taskIndex) - 1, t.mark());
-            finalOutput = "Nice! I've marked this task as done:\n" + t.mark();
-        } else if (commandType.equals(4)) { //unmark
-            String taskIndex = this.command.substring(7); //number
-            Task t = this.tasks.get(Integer.parseInt(taskIndex) - 1);
-            this.tasks.set(Integer.parseInt(taskIndex) - 1, t.unmark());
-            finalOutput = "OK, I've marked this task as not done yet:\n" + t.unmark();
-        } else if (commandType.equals(5)) { //delete
-            String taskIndex = this.command.substring(7);
-            Task t = this.tasks.get(Integer.parseInt(taskIndex) - 1);
-            this.tasks.remove(Integer.parseInt(taskIndex) - 1);
-            finalOutput = "Noted, I've removed this task:\n" + t + "\nNow you have "
-                    + this.tasks.getSize() + " task(s) in the list";
-        } else if (commandType.equals(6)) {
-            String searchCriteria = this.command.substring(5);
-            TaskList t = this.tasks.searchList(searchCriteria);
-            if (t.getSize() == 0) {
-                finalOutput = "There were no matches in your list\n";
-            } else {
-                finalOutput = "Here are the matching tasks in your list:\n" + showListOutput(t);
-            }
+        } else if (commandType.equals(MARK)) { //mark
+            finalOutput = mark(this.command, this.tasks);
+        } else if (commandType.equals(UNMARK)) { //unmark
+            finalOutput = unmark(this.command, this.tasks);
+        } else if (commandType.equals(DELETE)) { //delete
+            finalOutput = delete(this.command, this.tasks);
+        } else if (commandType.equals(FIND)) {
+            finalOutput = find(this.command, this.tasks);
+        } else if (commandType.equals(UPDATE)) {
+            finalOutput = updateList(this.command, this.tasks);
+
         }
         return finalOutput;
+    }
+
+    /**
+     * this is the actions of the mark command
+     *
+     * @param command command to be executed
+     * @param tasks our tasklist to act upon
+     * @return String reply output of command
+     */
+    private static String mark(String command, TaskList tasks) {
+        String taskIndex = command.substring(5); //number
+        Task t = tasks.get(Integer.parseInt(taskIndex) - 1);
+        tasks.set(Integer.parseInt(taskIndex) - 1, t.mark());
+        return "Nice! I've marked this task as done:\n" + t.mark();
+    }
+
+    /**
+     * this is the actions of the unmark command
+     *
+     * @param command command to be executed
+     * @param tasks our tasklists to act upon
+     * @return String reply output of command
+     */
+    private static String unmark(String command, TaskList tasks) {
+        String taskIndex = command.substring(7); //number
+        Task t = tasks.get(Integer.parseInt(taskIndex) - 1);
+        tasks.set(Integer.parseInt(taskIndex) - 1, t.unmark());
+        return "OK, I've marked this task as not done yet:\n" + t.unmark();
+    }
+
+    /**
+     * this is the actions of the delete command
+     *
+     * @param command command to be executed
+     * @param tasks our tasklist to act upon
+     * @return String reply output of command
+     */
+    private static String delete(String command, TaskList tasks) {
+        String taskIndex = command.substring(7);
+        Task t = tasks.get(Integer.parseInt(taskIndex) - 1);
+        tasks.remove(Integer.parseInt(taskIndex) - 1);
+        return "Noted, I've removed this task:\n" + t + "\nNow you have "
+                + tasks.getSize() + " task(s) in the list";
+    }
+
+    /**
+     * this is the actions of the find command
+     *
+     * @param command command to be executed
+     * @param tasks our tasklist to act upon
+     * @return String reply output of command
+     */
+    private static String find(String command, TaskList tasks) {
+        String searchCriteria = command.substring(5);
+        TaskList t = tasks.searchList(searchCriteria);
+        if (t.getSize() == 0) {
+            return "There were no matches in your list\n";
+        } else {
+            return "Here are the matching tasks in your list:\n" + showListOutput(t);
+        }
+    }
+
+    /**
+     * this is the actions of the update command
+     *
+     * @param command command to be executed
+     * @param tasks our tasklist to act upon
+     * @return String reply output of command
+     */
+    private static String updateList(String command, TaskList tasks) {
+        String remainingString = command.substring(7);
+        String[] indexAndCommand = remainingString.split(" ", 2);
+        Integer index = Integer.parseInt(indexAndCommand[0]);
+        String newCommand = indexAndCommand[1];
+
+        Task t = tasks.get(index - 1);
+        // we want to retain its done status
+        boolean isTDone = t.getDone();
+        assert commandParse(newCommand).equals(ADD);
+        // get task from command and set
+        Parser p = new Parser(newCommand, tasks);
+        Integer pErrorCode = p.errorInCommand();
+        System.out.println(pErrorCode);
+        if (pErrorCode != 0 && !pErrorCode.equals(DUPLICATE_TASK)) {
+            // since we are editing, theres a chance it may be duplicate tasks
+            return "Inner command error";
+        }
+        if (newCommand.startsWith("todo")) {
+            setTodo(newCommand, tasks, index, isTDone);
+        } else if (newCommand.startsWith("deadline")) {
+            setDeadline(newCommand, tasks, index, isTDone);
+        } else if (newCommand.startsWith("event")) {
+            setEvent(newCommand, tasks, index, isTDone);
+        }
+        return "I have edited the task at index: " + index + " to " + tasks.get(index - 1);
+    }
+
+    /**
+     * Setting method to edit the tasklist with a new todo task
+     *
+     * @param newCommand command to be executed
+     * @param tasks current tasklist to act upon
+     * @param index index of task to be updated
+     * @param isTDone the done status of the previous task (we want to maintain the status)
+     */
+    private static void setTodo(String newCommand, TaskList tasks, Integer index, boolean isTDone) {
+        tasks.set(index - 1, new Todo(isTDone, newCommand.substring(5)));
+    }
+
+    /**
+     * Setting method to edit the tasklist with a new deadline task
+     *
+     * @param command command to be executed
+     * @param tasks current tasklist to act upon
+     * @param index index of task to be updated
+     * @param isTDone the done status of the previous task (we want to maintain the status)
+     */
+    private static void setDeadline(String command, TaskList tasks, Integer index, boolean isTDone) {
+        int indexOfDeadline = command.indexOf("/");
+        String task = command.substring(9, indexOfDeadline - 1);
+        String deadline = command.substring(indexOfDeadline + 4);
+        if (deadline.length() == 15) { // yyyy-mm-dd tttt
+            String dateString = deadline.substring(0, 10);
+            String timingString = deadline.substring(11);
+            System.out.println(dateString);
+            String formattedTiming = new StringBuilder(timingString).insert(2, ":").toString();
+            System.out.println(formattedTiming);
+
+            LocalDate date = LocalDate.parse(dateString);
+            LocalTime time = LocalTime.parse(formattedTiming);
+            tasks.set(index - 1, new Deadline(isTDone, task, date, time));
+        } else {
+            LocalDate date = LocalDate.parse(deadline);
+            tasks.set(index - 1, new Deadline(isTDone, task, date));
+        }
+    }
+
+    /**
+     * Setting method to edit the tasklist with a new event task
+     *
+     * @param command command to be executed
+     * @param tasks current tasklist to act upon
+     * @param index index of task to be updated
+     * @param isTDone the done status of the previous task (we want to maintain the status)
+     */
+    private static void setEvent(String command, TaskList tasks, Integer index, boolean isTDone) {
+        int indexOfEvent = command.indexOf("/");
+        String task = command.substring(6, indexOfEvent - 1);
+        String at = command.substring(indexOfEvent + 6);
+        if (at.length() == 15) { // yyyy-mm-dd tttt
+            String dateString = at.substring(0, 10);
+            String timingString = at.substring(11);
+            String formattedTiming = new StringBuilder(timingString).insert(2, ":").toString();
+            System.out.println(dateString);
+            System.out.println(formattedTiming);
+
+            LocalDate date = LocalDate.parse(dateString);
+            LocalTime time = LocalTime.parse(formattedTiming);
+            tasks.set(index - 1, new Event(isTDone, task, date, time));
+        } else {
+            LocalDate date = LocalDate.parse(at);
+            tasks.set(index - 1, new Event(isTDone, task, date));
+        }
     }
 
     /**
@@ -200,17 +359,19 @@ public class Parser {
      */
     private static Integer commandParse(String command) {
         if (command.equals("list")) {
-            return 2;
+            return LIST;
         } else if (command.startsWith("mark")) {
-            return 3;
+            return MARK;
         } else if (command.startsWith("unmark")) {
-            return 4;
+            return UNMARK;
         } else if (command.startsWith("delete")) {
-            return 5;
+            return DELETE;
         } else if (command.startsWith("find")) {
-            return 6;
+            return FIND;
+        } else if (command.startsWith("update")) {
+            return UPDATE;
         }
-        return 1;
+        return ADD;
     }
 
     /**
@@ -239,7 +400,7 @@ public class Parser {
      */
     public Integer errorInCommand() {
         // list, todo, event, deadline, mark, unmark
-        String[] commandList = {"list", "todo", "deadline", "event", "mark", "unmark", "delete", "find"};
+        String[] commandList = {"list", "todo", "deadline", "event", "mark", "unmark", "delete", "find", "update"};
         int errorCode = 0;
         boolean isACommand = false;
         for (int i = 0; i < commandList.length; i++) {
