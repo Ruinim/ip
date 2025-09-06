@@ -13,6 +13,8 @@ import java.util.Scanner;
  * @author Ruinim
  */
 public class Storage {
+    static final Integer NO_FILE_FOUND = 12;
+    static final Integer WRITE_FAILED = 14;
     /**
      * dp is the directory path given
      * fp is the file path given
@@ -49,7 +51,7 @@ public class Storage {
                 output.add(parseLine(data));
             }
         } catch (FileNotFoundException ignored) {
-            throw new ReimException(12, "");
+            throw new ReimException(NO_FILE_FOUND, "");
         }
         return output;
     }
@@ -66,44 +68,56 @@ public class Storage {
         String rest = command.substring(8);
 
         if (type.equals("T")) {
-            if (done.equals("1")) {
-                return new Todo(true, rest);
-            }
-            return new Todo(false, rest);
+            return parseTodo(done, rest);
         } else if (type.equals("D")) {
-            String[] p = rest.split(" \\| ");
-            String task = p[0];
-            String time = p[1];
-            String[] dt = time.split(" ");
-
-            if (dt.length == 2) {
-                LocalDate date = LocalDate.parse(dt[0]);
-                String timing = dt[1];
-                LocalTime lt = LocalTime.parse(timing);
-                if (done.equals("1")) {
-                    return new Deadline(true, task, date, lt);
-                }
-                return new Deadline(false, task, date, lt);
-            }
-            if (done.equals("1")) {
-                return new Deadline(true, task, time);
-            }
-            return new Deadline(false, task, time);
+            return parseDeadline(done, rest);
         }
         // its E
-        String[] p = rest.split(" \\| ");
+        return parseEvent(done, rest);
+    }
+
+    private static Todo parseTodo(String done, String task) {
+        if (done.equals("1")) {
+            return new Todo(true, task);
+        }
+        return new Todo(false, task);
+    }
+
+    private static Deadline parseDeadline(String done, String restOfCommand) {
+        String[] p = restOfCommand.split(" \\| ");
         String task = p[0];
         String time = p[1];
-        String[] dt = time.split(" ");
+        String[] dateTime = time.split(" ");
 
-        if (dt.length == 2) {
-            LocalDate date = LocalDate.parse(dt[0]);
-            String timing = dt[1];
-            LocalTime lt = LocalTime.parse(timing);
+        if (dateTime.length == 2) {
+            LocalDate date = LocalDate.parse(dateTime[0]);
+            String timing = dateTime[1];
+            LocalTime finalTiming = LocalTime.parse(timing);
             if (done.equals("1")) {
-                return new Event(true, task, date, lt);
+                return new Deadline(true, task, date, finalTiming);
             }
-            return new Event(false, task, date, lt);
+            return new Deadline(false, task, date, finalTiming);
+        }
+        if (done.equals("1")) {
+            return new Deadline(true, task, time);
+        }
+        return new Deadline(false, task, time);
+    }
+
+    private static Event parseEvent(String done, String restOfCommand) {
+        String[] p = restOfCommand.split(" \\| ");
+        String task = p[0];
+        String time = p[1];
+        String[] dateTime = time.split(" ");
+
+        if (dateTime.length == 2) {
+            LocalDate date = LocalDate.parse(dateTime[0]);
+            String timing = dateTime[1];
+            LocalTime finalTime = LocalTime.parse(timing);
+            if (done.equals("1")) {
+                return new Event(true, task, date, finalTime);
+            }
+            return new Event(false, task, date, finalTime);
         }
         if (done.equals("1")) {
             return new Event(true, task, time);
@@ -134,6 +148,7 @@ public class Storage {
             writer.close();
         } catch (IOException ignored) {
             // refers to if there is nothing to read from file
+            System.out.println(new ReimException(WRITE_FAILED, "").getErrorMessage());
         }
     }
 }
