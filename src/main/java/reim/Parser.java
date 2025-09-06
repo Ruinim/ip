@@ -268,7 +268,6 @@ public class Parser {
         // get task from command and set
         Parser p = new Parser(newCommand, tasks);
         Integer pErrorCode = p.errorInCommand();
-        System.out.println(pErrorCode);
         if (pErrorCode != 0 && !pErrorCode.equals(DUPLICATE_TASK)) {
             // since we are editing, theres a chance it may be duplicate tasks
             return "Inner command error";
@@ -310,9 +309,7 @@ public class Parser {
         if (deadline.length() == 15) { // yyyy-mm-dd tttt
             String dateString = deadline.substring(0, 10);
             String timingString = deadline.substring(11);
-            System.out.println(dateString);
             String formattedTiming = new StringBuilder(timingString).insert(2, ":").toString();
-            System.out.println(formattedTiming);
 
             LocalDate date = LocalDate.parse(dateString);
             LocalTime time = LocalTime.parse(formattedTiming);
@@ -339,8 +336,6 @@ public class Parser {
             String dateString = at.substring(0, 10);
             String timingString = at.substring(11);
             String formattedTiming = new StringBuilder(timingString).insert(2, ":").toString();
-            System.out.println(dateString);
-            System.out.println(formattedTiming);
 
             LocalDate date = LocalDate.parse(dateString);
             LocalTime time = LocalTime.parse(formattedTiming);
