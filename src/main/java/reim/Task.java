@@ -7,7 +7,7 @@ package reim;
 public class Task {
     /**
      * task is the task that we need to do
-     * done is if we have done this task ([X], [ ])
+     * isDone is if we have done this task ([X], [ ])
      */
     protected String task;
     protected boolean isDone;

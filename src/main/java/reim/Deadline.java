@@ -19,13 +19,13 @@ public class Deadline extends Task {
     /**
      * Constructor method of Deadline for String, String, String
      *
-     * @param done done status of task
+     * @param isDone done status of task
      * @param task description of task
      * @param by String of when the deadline is to be converted to LocalDate
      */
-    public Deadline(boolean done, String task, String by) {
+    public Deadline(boolean isDone, String task, String by) {
         // if no time stated, assume midnight
-        super(done, task);
+        super(isDone, task);
         this.deadlineDate = LocalDate.parse(by);
         this.deadlineTime = LocalTime.parse("00:00");
     }
@@ -33,12 +33,12 @@ public class Deadline extends Task {
     /**
      * Constructor method of Deadline for String, String, LocalDate
      *
-     * @param done done status of task
+     * @param isDone done status of task
      * @param task description of task
      * @param by when the deadline is
      */
-    public Deadline(boolean done, String task, LocalDate by) {
-        super(done, task);
+    public Deadline(boolean isDone, String task, LocalDate by) {
+        super(isDone, task);
         this.deadlineDate = by;
         this.deadlineTime = LocalTime.parse("00:00");
     }
@@ -46,13 +46,13 @@ public class Deadline extends Task {
     /**
      * constructor method of Deadline for String, String, LocalDate, LocalTime
      *
-     * @param done done status of task
+     * @param isDone done status of task
      * @param task description of task
      * @param by when the deadline is
      * @param time what time is the deadline
      */
-    public Deadline(boolean done, String task, LocalDate by, LocalTime time) {
-        super(done, task);
+    public Deadline(boolean isDone, String task, LocalDate by, LocalTime time) {
+        super(isDone, task);
         this.deadlineDate = by;
         this.deadlineTime = time;
     }
@@ -79,7 +79,8 @@ public class Deadline extends Task {
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + this.deadlineDate.format(DateTimeFormatter.ofPattern("MMM dd yyyy"))
+        return "[D]" + super.toString() + " (by: " + this.deadlineDate
+                .format(DateTimeFormatter.ofPattern("MMM dd yyyy"))
                 + " " + this.deadlineTime.format(DateTimeFormatter.ofPattern("HH:mm")) + ")";
     }
 

@@ -30,8 +30,12 @@ public class MainWindow extends AnchorPane {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
     }
 
-    /** Injects the Duke instance */
-    public void setDuke(Reim r) {
+    /**
+     * Injects the Reim instance
+     *
+     * @param r the Reim instance to inject
+     */
+    public void setReim(Reim r) {
         reim = r;
     }
 
@@ -45,7 +49,7 @@ public class MainWindow extends AnchorPane {
         String response = reim.getResponse(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getDukeDialog(response, dukeImage)
+                DialogBox.getReimDialog(response, dukeImage)
         );
         if (response.equals("""
                 ____________________________________________________________

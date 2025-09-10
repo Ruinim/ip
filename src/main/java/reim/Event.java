@@ -15,40 +15,40 @@ public class Event extends Task {
     /**
      * Constructor method of Event for String, String and LocalDate
      *
-     * @param done done status of task
+     * @param isDone done status of task
      * @param task description of task
-     * @param fm from when does the event start
+     * @param fromTime from when does the event start
      */
-    public Event(boolean done, String task, LocalDate fm) {
-        super(done, task);
-        this.startDate = fm;
+    public Event(boolean isDone, String task, LocalDate fromTime) {
+        super(isDone, task);
+        this.startDate = fromTime;
         this.startTime = LocalTime.parse("00:00");
     }
 
     /**
      * Constructor method of Event for String, String and String
      *
-     * @param done done status of task
+     * @param isDone done status of task
      * @param task description of task
-     * @param fm from when does the event start to be converted to LocalDate
+     * @param fromTime from when does the event start to be converted to LocalDate
      */
-    public Event(boolean done, String task, String fm) {
-        super(done, task);
-        this.startDate = LocalDate.parse(fm);
+    public Event(boolean isDone, String task, String fromTime) {
+        super(isDone, task);
+        this.startDate = LocalDate.parse(fromTime);
         this.startTime = LocalTime.parse("00:00");
     }
 
     /**
      * Constructor method of Event for String, String, LocalDate and LocalTime
      *
-     * @param done done status of task
+     * @param isDone done status of task
      * @param task description of task
-     * @param fm from when does the event start
+     * @param fromTime from when does the event start
      * @param time what time does the event start
      */
-    public Event(boolean done, String task, LocalDate fm, LocalTime time) {
-        super(done, task);
-        this.startDate = fm;
+    public Event(boolean isDone, String task, LocalDate fromTime, LocalTime time) {
+        super(isDone, task);
+        this.startDate = fromTime;
         this.startTime = time;
     }
 

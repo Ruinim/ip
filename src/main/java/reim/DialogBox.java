@@ -49,11 +49,25 @@ public class DialogBox extends HBox {
         dialog.getStyleClass().add("reply-label");
     }
 
+    /**
+     * Create a DialogBox object with given text and image for the user
+     *
+     * @param text Text to be shown in the generated DialogBox
+     * @param img Image to be shown in the DialogBox
+     * @return Generated DialogBox for user
+     */
     public static DialogBox getUserDialog(String text, Image img) {
         return new DialogBox(text, img);
     }
 
-    public static DialogBox getDukeDialog(String text, Image img) {
+    /**
+     * Create a DialogBox object with given text and image for Reim
+     *
+     * @param text Text to be shown in the generated DialogBox
+     * @param img Image to be shown in the DialogBox
+     * @return Generated DialogBox for Reim
+     */
+    public static DialogBox getReimDialog(String text, Image img) {
         var db = new DialogBox(text, img);
         db.flip();
         return db;
