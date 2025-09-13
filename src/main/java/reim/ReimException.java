@@ -44,7 +44,8 @@ public class ReimException extends Exception {
      * @return A descriptive error message string for display to the user.
      */
     public String getErrorMessage() {
-        String[] errorMsg = {"invalid command: please use the commands list, todo event, deadline, mark, unmark",
+        String[] errorMsg = {"invalid command: please use the commands: list,"
+                + "todo, event, deadline, mark, unmark, find, delete, update",
             "missing arguments", "invalid command: list command should not have arguments",
             "invalid command: mark command followed by char when it was meant to be an int",
             "Index out of bounds", "invalid arguments: no timing given", "invalid argument: no task given in command",

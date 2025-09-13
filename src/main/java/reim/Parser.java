@@ -598,7 +598,6 @@ public class Parser {
         try {
             assert command.substring(startIndex, endIndex).isEmpty();
         } catch (AssertionError e) {
-            System.out.println(e.getMessage());
             return false;
         }
         return true;
