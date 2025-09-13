@@ -78,6 +78,7 @@ public class TaskList {
      */
     public Task get(int index) {
         assert index < this.tasks.size();
+        assert index >= 0;
         return this.tasks.get(index);
     }
 
@@ -89,6 +90,7 @@ public class TaskList {
      */
     public void set(int index, Task task) {
         assert index < this.tasks.size();
+        assert index >= 0;
         this.tasks.set(index, task);
     }
 
