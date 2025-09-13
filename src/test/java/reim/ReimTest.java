@@ -30,6 +30,8 @@ public class ReimTest {
         assertEquals(9, new Parser("mark 3", t).errorInCommand());
         assertEquals(10, new Parser("todo borrow", t).errorInCommand());
         assertEquals(11, new Parser("deadline assignment /by 2200-12-hi", t).errorInCommand());
+        assertEquals(13, new Parser("event tasd /from 2002-31-31", t).errorInCommand());
+        assertEquals(13, new Parser("event sadasd /from 2002-12-12 5555", t).errorInCommand());
     }
 
     @Test

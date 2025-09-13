@@ -578,12 +578,7 @@ public class Parser {
      * @return true if delimiter is absent, else false
      */
     private static boolean checkForNoSecondPart(String command, String checkCriteria) {
-        try {
-            assert command.contains(checkCriteria);
-        } catch (AssertionError e) {
-            return true;
-        }
-        return false;
+        return !command.contains(checkCriteria);
     }
 
     /**
@@ -595,12 +590,7 @@ public class Parser {
      * @return true if there is no task string to be found, else false
      */
     private static boolean checkForNoTaskPresent(String command, Integer startIndex, Integer endIndex) {
-        try {
-            assert command.substring(startIndex, endIndex).isEmpty();
-        } catch (AssertionError e) {
-            return false;
-        }
-        return true;
+        return command.substring(startIndex, endIndex).isEmpty();
     }
 
     /**
@@ -612,12 +602,7 @@ public class Parser {
      * @return true if the timing argument is missing, false otherwise
      */
     private static boolean checkForNoTiming(String command, Integer index, Integer offset) {
-        try {
-            assert command.substring(index + offset - 1).isEmpty();
-        } catch (AssertionError e) {
-            return false;
-        }
-        return true;
+        return command.substring(index + offset - 1).isEmpty();
     }
 
     /**
@@ -630,13 +615,8 @@ public class Parser {
      * @return true if task can be found already in the tasklist, else false
      */
     private static boolean checkForDuplicate(String command, TaskList tasks, Integer startIndex, Integer endIndex) {
-        try {
-            assert tasks.getArray().stream().anyMatch(x -> x.getTask()
-                    .equals(command.substring(startIndex, endIndex - 1)));
-        } catch (AssertionError e) {
-            return false;
-        }
-        return true;
+        return tasks.getArray().stream().anyMatch(x -> x.getTask()
+                .equals(command.substring(startIndex, endIndex - 1)));
     }
 
     /**
@@ -648,15 +628,11 @@ public class Parser {
      * @return true if date/time given does not follow the required format, else false
      */
     private static boolean checkForWrongTimingFormat(String command, Integer index, Integer offset) {
-        try {
-            boolean followsYearWithTimeFormat = command.substring(index + offset)
-                    .matches("\\d{4}-\\d{2}-\\d{2} \\d{4}");
-            boolean followsYearOnlyFormat = command.substring(index + offset).matches("\\d{4}-\\d{2}-\\d{2}");
-            assert followsYearWithTimeFormat || followsYearOnlyFormat;
-        } catch (AssertionError e) {
-            return true;
-        }
-        return false;
+        boolean followsYearWithTimeFormat = command.substring(index + offset)
+                .matches("\\d{4}-\\d{2}-\\d{2} \\d{4}");
+        boolean followsYearOnlyFormat = command.substring(index + offset).matches("\\d{4}-\\d{2}-\\d{2}");
+        return !(followsYearOnlyFormat || followsYearWithTimeFormat);
+
     }
 
     /**
@@ -673,20 +649,10 @@ public class Parser {
             String dateString = deadline.substring(0, 10);
             String timingString = deadline.substring(11);
             String formattedTiming = new StringBuilder(timingString).insert(2, ":").toString();
-            try {
-                assert canStringConvertToLocalDate(dateString);
-                assert canStringConvertToLocalTime(formattedTiming);
-            } catch (AssertionError e) {
-                return true;
-            }
-        } else {
-            try {
-                assert canStringConvertToLocalDate(deadline);
-            } catch (AssertionError e) {
-                return true;
-            }
+            return !(canStringConvertToLocalTime(formattedTiming) && canStringConvertToLocalDate(dateString));
+
         }
-        return false;
+        return !canStringConvertToLocalDate(deadline);
     }
 
     /**

@@ -116,7 +116,7 @@ public class Reim {
      * @throws ReimException if an error occurs during initialization or execution
      */
     public static void main(String[] args) throws ReimException {
-        new Reim("src/data", "src/data/reim.txt").run();
+        new Reim("data", "data/reim.txt").run();
 
     }
 }
