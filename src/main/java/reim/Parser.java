@@ -267,7 +267,13 @@ public class Parser {
     private static String updateList(String command, TaskList tasks) {
         String remainingString = command.substring(7);
         String[] indexAndCommand = remainingString.split(" ", 2);
+        if (checkCannotIntParse(indexAndCommand[0])) {
+            return "Update command error: index cannot be parsed to Int";
+        }
         Integer index = Integer.parseInt(indexAndCommand[0]);
+        if (index <= 0 || index > tasks.getSize()) {
+            return "Update command error: index of of bounds";
+        }
         String newCommand = indexAndCommand[1];
 
         Task t = tasks.get(index - 1);
