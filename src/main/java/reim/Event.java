@@ -5,11 +5,14 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Event type task
+ * Represents a task that has an event, which includes both a date and optional time.
+ * This is a subclass of Task.
  * @author Ruinim
  */
 public class Event extends Task {
+    /** The date when the event starts. */
     private final LocalDate startDate;
+    /** The time when the event starts. Defaults to 00:00 if not specified. */
     private final LocalTime startTime;
 
     /**
@@ -53,9 +56,10 @@ public class Event extends Task {
     }
 
     /**
-     * marking this task as not done
+     * Returns a new Event instance identical to this one,
+     * but marked as not done.
      *
-     * @return duplicate of task object but unmarked
+     * @return a copy of this task marked as not done
      */
     @Override
     public Event unmark() {
@@ -63,9 +67,10 @@ public class Event extends Task {
     }
 
     /**
-     * marking this task as done
+     * Returns a new Event instance identical to this one,
+     * but marked as done.
      *
-     * @return duplicate of task object but marked
+     * @return a copy of this task marked as done
      */
     @Override
     public Event mark() {
@@ -79,9 +84,10 @@ public class Event extends Task {
     }
 
     /**
-     * Generate output of Task for it to be saved into external file
+     * Generates a formatted string representation of this task for file storage.
+     * Format: { E | 1/0 | task description | yyyy-MM-dd HH:mm}
      *
-     * @return string output of event
+     * @return a machine-readable string representation of the task
      */
     @Override
     public String generateFormattedString() {

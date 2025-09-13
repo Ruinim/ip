@@ -3,19 +3,32 @@ package reim;
 import java.util.Scanner;
 
 /**
- * class for most of the printing done by the application
+ * Handles all user interaction for the Reim application.
+ * <p>
+ * This class manages the input/output interface through the console.
+ * It prints welcome and exit messages, outputs command results,
+ * and handles error messages consistently with formatting.
+ * </p>
+ *
+ * @author Ruinim
  */
 public class Ui {
     private Scanner read;
 
     /**
-     * constructor method of Ui
+     * Constructs a Ui instance with an input scanner.
      */
     public Ui() {
         read = new Scanner(System.in);
     }
 
 
+    /**
+     * Formats a message with a surrounding border for consistent UI output.
+     *
+     * @param msg The message to format.
+     * @return A string wrapped with horizontal borders.
+     */
     private static String makeUiMessage(String msg) {
         return "____________________________________________________________\n"
                 + msg + "\n"
@@ -23,7 +36,7 @@ public class Ui {
     }
 
     /**
-     * printing of staring message
+     * Prints the startup message when the application begins.
      */
     public void start() {
         System.out.println("""
@@ -35,9 +48,9 @@ public class Ui {
     }
 
     /**
-     * Checks if there is more inputs in the scanner
+     * Checks if there is another line of input available.
      *
-     * @return if there is still inputs in the scanner, return true, else false
+     * @return true if input is available; false otherwise.
      */
     public boolean hasMoreInput() {
         if (this.read.hasNextLine()) {
@@ -47,16 +60,16 @@ public class Ui {
     }
 
     /**
-     * Obtains line of input from scanner
+     * Reads and returns the next line of user input.
      *
-     * @return next line of scanner
+     * @return The next line of input from the user.
      */
     public String showInputLine() {
         return this.read.nextLine();
     }
 
     /**
-     * printing of ending message
+     * Prints the farewell message when the application ends.
      */
     public void end() {
         System.out.println("""
@@ -67,9 +80,9 @@ public class Ui {
     }
 
     /**
-     * Produce string needed for printing the ending statement of the application
+     * Generates the formatted exit message.
      *
-     * @return String output to be printed when the application is about to close
+     * @return A string representing the exit message.
      */
     public String generateEndStatement() {
         return """
@@ -79,27 +92,40 @@ public class Ui {
                 """;
     }
 
+    /**
+     * Formats an error message for display.
+     *
+     * @param error The ReimException containing the error details.
+     * @return A formatted error message string.
+     */
     public String processErrorOutput(ReimException error) {
         return makeUiMessage(error.getErrorMessage());
     }
 
+    /**
+     * Formats a normal message (e.g., success or status messages) for display.
+     *
+     * @param output The message to display.
+     * @return A formatted message string.
+     */
     public String processNormalOutput(String output) {
         return makeUiMessage(output);
     }
 
     /**
-     * printing of normal output to be used for successful runs of commands
+     * Prints a formatted message to the console.
+     * Typically used for command results or informational messages.
      *
-     * @param stringToPrint output of string or command given
+     * @param stringToPrint The message to print.
      */
     public void printOutput(String stringToPrint) {
         System.out.println(processNormalOutput(stringToPrint));
     }
 
     /**
-     * printing of error outputs to be used when an error is detected
+     * Prints a formatted error message to the console.
      *
-     * @param errorToPrint exception object to be printed
+     * @param errorToPrint The {@code ReimException} to display.
      */
     public void printError(ReimException errorToPrint) {
         System.out.println(processErrorOutput(errorToPrint));

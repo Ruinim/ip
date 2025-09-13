@@ -1,21 +1,26 @@
 package reim;
 
 /**
- * Our individual entries
+ * Represents a general task with a description and completion status.
+ * This is the base class for more specific task types such as Todo, Deadline, and Event.
+ * Each Task object is immutable; marking or unmarking returns a new Task instance.
+ *
  * @author Ruinim
  */
 public class Task {
     /**
-     * task is the task that we need to do
-     * isDone is if we have done this task ([X], [ ])
+     * The description of the task.
      */
     protected String task;
+    /**
+     * Indicates whether the task is marked as done.
+     */
     protected boolean isDone;
 
     /**
-     * Constructor method of Task
+     * Constructs a Task with the given completion status and description.
      *
-     * @param d done status of Task
+     * @param d true if the task is completed; false otherwise
      * @param t description of Task
      */
     public Task(boolean d, String t) {
@@ -24,36 +29,36 @@ public class Task {
     }
 
     /**
-     * get task string
+     * Returns the description of the task.
      *
-     * @return task string of object
+     * @return the task description
      */
     public String getTask() {
         return this.task;
     }
 
     /**
-     * get done string
+     * Returns the completion status of the task.
      *
-     * @return done string of object
+     * @return true if the task is marked as done; false otherwise
      */
     public boolean getDone() {
         return this.isDone;
     }
 
     /**
-     * marking this task as not done
+     * Returns a new Task instance representing this task marked as not done.
      *
-     * @return duplicate of task object but unmarked
+     * @return a new Task object with the same description, marked as not done
      */
     public Task unmark() {
         return new Task(false, this.task);
     }
 
     /**
-     * marking this task as done
+     * Returns a new Task instance representing this task marked as done.
      *
-     * @return duplicate of task object but marked
+     * @return a new Task object with the same description, marked as done
      */
     public Task mark() {
         return new Task(true, this.task);
@@ -65,9 +70,10 @@ public class Task {
     }
 
     /**
-     * Generate output of Task for it to be saved into external file
+     * Generates a formatted string representing this task for saving to a file.
+     * This method is intended to be overridden by subclasses.
      *
-     * @return string output of event
+     * @return the formatted string for persistent storage
      */
     public String generateFormattedString() {
         return "";

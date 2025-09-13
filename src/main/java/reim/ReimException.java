@@ -1,19 +1,25 @@
 package reim;
 
 /**
- * Exception class for our application
+ * Custom exception class for the Reim application.
+ * <p>
+ * Used to represent specific command-related errors during execution,
+ * each with an associated error code and the offending command string.
+ * </p>
+ * Error messages are generated based on predefined codes and are
+ * designed to provide helpful feedback to the user.
+ * </p>
+ *
  * @author Ruinim
  */
 public class ReimException extends Exception {
-    /**
-     * err is our error code
-     * command is the command that had generated this error
-     */
+    /** Error code that determines the type of exception. */
     private final Integer err;
+    /** The command that triggered the exception. */
     private final String command;
 
     /**
-     * Constructor method of ReimException
+     * Constructs a new ReimException with the specified error code and command.
      *
      * @param err error code to decide which error message to print
      * @param command the command that caused this error
@@ -24,18 +30,18 @@ public class ReimException extends Exception {
     }
 
     /**
-     * to return the error code generated
+     * Returns the error code associated with this exception.
      *
-     * @return error code generated
+     * @return An integer representing the error code.
      */
     public Integer getError() {
         return this.err;
     }
 
     /**
-     * List of possible error messages
+     * Returns a user-friendly error message based on the error code and offending command.
      *
-     * @return appropriate error message depending on the error code of the object
+     * @return A descriptive error message string for display to the user.
      */
     public String getErrorMessage() {
         String[] errorMsg = {"invalid command: please use the commands list, todo event, deadline, mark, unmark",

@@ -9,17 +9,20 @@ import java.time.LocalTime;
 import java.util.Scanner;
 
 /**
- * Class at which we use to read the initial file and to write into a data file to save our entries
+ * Handles loading from and saving to the local data file for the application.
+ * <p>
+ *     Reading saved tasks from a file and converting them into Task objects
+ *     Writing the current list of tasks to disk for persistence between sessions
+ * </p>
  * @author Ruinim
  */
 public class Storage {
     static final Integer NO_FILE_FOUND = 12;
     static final Integer WRITE_FAILED = 14;
-    /**
-     * dp is the directory path given
-     * fp is the file path given
-     */
+
+    /** Directory path where the save file resides.*/
     private final String directoryPath;
+    /** File path of the save file. */
     private final String filePath;
 
     /**
@@ -34,9 +37,13 @@ public class Storage {
     }
 
     /**
-     * Reads the files from the file path given during the creation of the object
+     * Reads saved tasks from the file path and reconstructs the TaskList.
+     * <p>
+     * If the file does not exist, returns an empty task list without error.
+     * </p>
      *
-     * @return TaskList generated from the file given
+     * @return A {@code TaskList} populated from the file, or empty if file is missing.
+     * @throws ReimException if the file is found but unreadable.
      */
     public TaskList readFile() throws ReimException {
         File f = new File(this.filePath);
@@ -57,10 +64,10 @@ public class Storage {
     }
 
     /**
-     * processes the string commands in the file and coverts them to their respective tasks to be added into TaskList
+     * Parses a single line of file data and converts it to a Task.
      *
-     * @param command the command to process
-     * @return the Task generated form the string
+     * @param command A formatted line representing a task.
+     * @return A corresponding Task object.
      */
     private static Task parseLine(String command) {
         String type = String.valueOf(command.charAt(0));
@@ -147,9 +154,13 @@ public class Storage {
     }
 
     /**
-     * Saving the entries of our current TaskList into the file
+     * Saves the current list of tasks to the specified file.
+     * <p>
+     * This method ensures the directory exists, and overwrites the file
+     * with the current list of tasks in formatted string form.
+     * </p>
      *
-     * @param arr taskList to be saved into the external file
+     * @param arr The TaskList to be saved.
      */
     public void saveArray(TaskList arr) {
         File d = new File(this.directoryPath);

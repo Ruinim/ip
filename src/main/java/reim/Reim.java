@@ -1,25 +1,36 @@
 package reim;
 
 /**
- * Reim is the driver class of the entire application
+ * The {Reim} class serves as the main driver for the application.
+ * It initializes the necessary components and handles both command-line and GUI-based execution modes.
+ * <p>
+ * This class coordinates interactions between the user interface (Ui),
+ * the task list (TaskList), and the storage component (Storage).
+ * </p>
+ *
  * @author Ruinim
  */
 public class Reim {
     /**
-     * storage is where our class methods of reading initial file and saving entries are located
-     * items is the TaskList of items where our entries are
-     * ui is the printing class
+     * Handles reading from and writing to the storage file.
      */
     private Storage storage;
+    /**
+     * Stores the list of tasks in the application.
+     */
     private TaskList items;
+    /**
+     * Manages user interaction including input and output.
+     */
     private Ui ui;
 
     /**
-     * Constructor method of Reim
+     *  Constructs a Reim instance by initializing the UI, loading tasks from storage
+     *  and setting up the internal task list.
      *
      * @param dirPath relative directory path of file to be read from
      * @param filePath relative file path of file to be read and written into
-     * @throws ReimException exception handler
+     * @throws ReimException if there is an error initializing the storage or reading the file
      */
     public Reim(String dirPath, String filePath) throws ReimException {
         ui = new Ui();
@@ -29,7 +40,9 @@ public class Reim {
     }
 
     /**
-     * driver method to run manually (without the GUI)
+     * Starts the application in manual mode (no GUI).
+     * Continuously reads and processes user input until the bye command is issued.
+     * Handles command parsing, error checking, task list updates, and file saving.
      */
     public void run() {
         ui.start();
@@ -63,10 +76,12 @@ public class Reim {
     }
 
     /**
-     * To parse and obtain the response from the command received from the user input in GUI mode
+     * Processes a user command and returns the appropriate response.
+     * This method is used in GUI mode to handle user input and return feedback as a string.
+     * It performs validation, executes actions, updates storage, and formats the output.
      *
-     * @param command the command to parse and reply
-     * @return the reply string of the command
+     * @param command the user command to be parsed and executed
+     * @return a string containing the response to the user
      */
     public String getResponse(String command) {
         if (command.equals("bye")) {
@@ -94,7 +109,12 @@ public class Reim {
         return ui.processNormalOutput(output);
     }
 
-
+    /**
+     * The application's entry point. Initializes and runs the application in command-line mode.
+     *
+     * @param args command-line arguments (not used)
+     * @throws ReimException if an error occurs during initialization or execution
+     */
     public static void main(String[] args) throws ReimException {
         new Reim("src/data", "src/data/reim.txt").run();
 

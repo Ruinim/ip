@@ -5,21 +5,40 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * object wrapping around arraylist of tasks
+ * A wrapper class around an arraylist of tasks that provides
+ * utility methods for managing a list of tasks.
+ * This class supports adding, removing, updating, and searching tasks.
+ *
  * @author Ruinim
  */
 public class TaskList {
-    /** tasks is the arraylist of tasks to wrap */
+    /**
+     * Internal list that stores the tasks.
+     */
     private ArrayList<Task> tasks;
 
+    /**
+     * Constructs an empty TaskList.
+     */
     public TaskList() {
         this.tasks = new ArrayList<>();
     }
 
+    /**
+     * Constructs a TaskList with an existing list of tasks.
+     *
+     * @param tasks the list of tasks to wrap
+     */
     public TaskList(ArrayList<Task> tasks) {
         this.tasks = tasks;
     }
 
+    /**
+     * Constructs a new TaskList by copying the internal task list
+     * of another TaskList instance.
+     *
+     * @param t the TaskList to copy
+     */
     public TaskList(TaskList t) {
         this.tasks = t.getArray();
     }
@@ -58,6 +77,7 @@ public class TaskList {
      * @return task at index given
      */
     public Task get(int index) {
+        assert index < this.tasks.size();
         return this.tasks.get(index);
     }
 
@@ -68,6 +88,7 @@ public class TaskList {
      * @param task is new task to be swapped in
      */
     public void set(int index, Task task) {
+        assert index < this.tasks.size();
         this.tasks.set(index, task);
     }
 

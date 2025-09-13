@@ -1,7 +1,8 @@
 package reim;
 
 /**
- * todo type task
+ * Represents a task that has a todo
+ * This is a subclass of Task.
  * @author Ruinim
  */
 public class Todo extends Task {
@@ -11,9 +12,10 @@ public class Todo extends Task {
     }
 
     /**
-     * marking this task as not done
+     * Returns a new Todo instance identical to this one,
+     * but marked as not done.
      *
-     * @return duplicate of task object but unmarked
+     * @return a copy of this task marked as not done
      */
     @Override
     public Todo unmark() {
@@ -21,9 +23,10 @@ public class Todo extends Task {
     }
 
     /**
-     * marking this task as done
+     * Returns a new Todo instance identical to this one,
+     * but marked as done.
      *
-     * @return duplicate of task object but marked
+     * @return a copy of this task marked as done
      */
     @Override
     public Todo mark() {
@@ -36,9 +39,10 @@ public class Todo extends Task {
     }
 
     /**
-     * Generate output of Task for it to be saved into external file
+     * Generates a formatted string representation of this task for file storage.
+     * Format: { T | 1/0 | task description }
      *
-     * @return string output of event
+     * @return a machine-readable string representation of the task
      */
     @Override
     public String generateFormattedString() {

@@ -5,15 +5,14 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Deadline type task
+ * Represents a task that has a deadline, which includes both a date and optional time.
+ * This is a subclass of Task.
  * @author Ruinim
  */
 public class Deadline extends Task {
-    /**
-     * by is the date of the deadline task
-     * time is the time of the deadline task
-     */
+    /** The date of the deadline. */
     private final LocalDate deadlineDate;
+    /** The time of the deadline. Defaults to 00:00 if not specified. */
     private final LocalTime deadlineTime;
 
     /**
@@ -58,9 +57,10 @@ public class Deadline extends Task {
     }
 
     /**
-     * marking this task as not done
+     * Returns a new Deadline instance identical to this one,
+     * but marked as not done.
      *
-     * @return duplicate of task object but unmarked
+     * @return a copy of this task marked as not done
      */
     @Override
     public Deadline unmark() {
@@ -68,9 +68,10 @@ public class Deadline extends Task {
     }
 
     /**
-     * marking this task as done
+     * Returns a new Deadline instance identical to this one,
+     * but marked as done.
      *
-     * @return duplicate of task object but marked
+     * @return a copy of this task marked as done
      */
     @Override
     public Deadline mark() {
@@ -85,9 +86,10 @@ public class Deadline extends Task {
     }
 
     /**
-     * Generate output of Task for it to be saved into external file
+     * Generates a formatted string representation of this task for file storage.
+     * Format: { D | 1/0 | task description | yyyy-MM-dd HH:mm}
      *
-     * @return string output of event
+     * @return a machine-readable string representation of the task
      */
     @Override
     public String generateFormattedString() {
